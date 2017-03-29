@@ -1,0 +1,54 @@
+<div class="row-fluid">
+<table class="table table-hover table-bordered">
+	<thead>
+	<tr>
+		<th style="text-align:left;">No.</th>
+		<th>{if $kat eq 'SEKOLAH'}No. Order/Sekolah/Item{else}No.Order/Nama Lengkap{/if}</th>
+		<th style="text-align:right;">Harga</th>
+		<th style="text-align:right;">Jumlah/Qty</th>
+		<th style="text-align:right;">Total</th>
+		
+	</tr>
+	</thead>
+	<tbody>
+	{assign var=tot_qty value=0}
+	{assign var=tot_bayar value=0}
+	{assign var=grand_tot value=0}
+	{if !empty($data)}
+	{foreach from=$data item=i name=x}
+	{assign var=tot_qty value=$tot_qty+$i.jml_buku}
+	{assign var=grand_tot value=$grand_tot+$i.grand_total}
+	<tr style="font-weight:bold;">
+		<td >{$smarty.foreach.x.iteration}</td>
+		<td colspan="2">{$i.no_order|default:'-'} ( {if $kat eq 'SEKOLAH'}{$i.sekolah|default:'-'}{else}{$i.nama_lengkap|default:'-'} {/if})</td>
+		<td style="text-align:right;">{$i.jml_buku|number_format:2:',':'.'|default:'-'}</td>
+		<td style="text-align:right;">Rp.{$i.grand_total|number_format:2:',':'.'|default:'-'}</td>
+	</tr>
+		{foreach from=$i.detil item=y name=t}
+		<tr>
+			<td >&nbsp;</td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;{$y.judul_buku|default:'-'} </td>
+			<td style="text-align:right;">Rp. {$y.harga|number_format:2:',':'.'|default:'-'}</th>
+			<td style="text-align:right;">{$y.qty|number_format:2:',':'.'|default:'-'}</td>
+			<td style="text-align:right;">Rp.{$y.subtotal|number_format:2:',':'.'|default:'-'}</td>
+		</tr>
+		{/foreach}
+	{/foreach}
+	{else}
+	<tr>
+		<td colspan="5" style="text-align:center;" style="font-weight:bold;">-- Tidak Ada Transaksi Pada Periode Tersebut --</td>
+	</tr>
+	{/if}
+	</tbody>
+	<tfoot>
+	<tr style="font-weight:bold;">
+		<td colspan="3" style="text-align:center;">GRAND TOTAL</td>
+		<td style="text-align:right;">{$tot_qty|number_format:2:',':'.'|default:'-'}</td>
+		<td style="text-align:right;">Rp.{$grand_tot|number_format:2:',':'.'|default:'-'}</td>
+	</tr>
+	</tfoot>
+	</table>
+</div>
+
+
+

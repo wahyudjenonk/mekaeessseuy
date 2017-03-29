@@ -1,0 +1,53 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<title>Aldeaz Marketing App</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="{$host}__assets/form/css/demo.css">
+	<link rel="stylesheet" href="{$host}__assets/form/css/sky-forms.css">
+</head>
+	<body class="bg-orange">
+		<div class="body body-s">
+			<form class="sky-form" name='frmLogin' action="{$host}backoffice-masuk" method="post">
+				<header><center><img src='{$host}__assets/img/logo-aldeaz.png' /></center></header>
+				<fieldset>					
+					<section>
+						<div class="row">
+							<label class="label col col-4">E-mail</label>
+							<div class="col col-8">
+								<label class="input">
+									<i class="icon-append icon-user"></i>
+									<input type="text" name="user" />
+								</label>
+							</div>
+						</div>
+					</section>
+					<section>
+						<div class="row">
+							<label class="label col col-4">Password</label>
+							<div class="col col-8">
+								<label class="input">
+									<i class="icon-append icon-lock"></i>
+									<input type="password" name="pwd" />
+								</label>
+								<div class="note"><a href="{$host}forgotpassword">Lupa Password?</a> | <a href="{$host}registrasi">Daftar Sekarang</a></div>
+							</div>
+						</div>
+					</section>		
+					{if isset($error)}
+						<div style="text-align:center;margin-top:30px">
+							<span style="color:red;"><b><i>{$error}</i></b></span>
+						</div>
+					{/if}	
+				</fieldset>
+				<footer>
+					<button type="submit" class="button">Masuk</button>
+				</footer>
+			</form>
+			
+		</div>
+	</body>
+
+<!-- Mirrored from voky.com.ua/showcase/sky-forms/examples/demo-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 07 Nov 2016 09:46:55 GMT -->
+</html>

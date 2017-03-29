@@ -1,0 +1,118 @@
+<div class="page-header position-relative">
+	<h1>
+		Pengaturan Profil User
+	</h1>
+</div>
+<div class="row-fluid">
+	<div class="span12">
+		<form class="form-horizontal" id='upsbro' name='frmUpdate' url="{$host}submit-ubahprofil" enctype="multipart/form-data" method="post">
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Nama Lengkap</label>
+				<div class="controls">
+					<input id="form-field-1" class="span8 validasi" name='nlengkap' value="{$data.nama_lengkap}" type="text">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Alamat Email</label>
+				<div class="controls">
+					<input class="span8" id="form-field-1" readonly value="{$data.email_address}" type="text">
+					<span class="help-inline"><font color='red'>Tidak Bisa Diubah</font></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Kode Marketing</label>
+				<div class="controls">
+					<input class="span8" id="form-field-1" readonly value="{$data.member_user}" type="text">
+					<span class="help-inline"><font color='red'>Tidak Bisa Diubah</font></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Provinsi</label>
+				<div class="controls">
+					<input class="span8" id="form-field-1" readonly value="{$data.provinsi}" type="text">
+					<span class="help-inline"><font color='red'>Tidak Bisa Diubah</font></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Kab/Kota</label>
+				<div class="controls">
+					<input class="span8" id="form-field-1" readonly value="{$data.kab_kota}" type="text">
+					<span class="help-inline"><font color='red'>Tidak Bisa Diubah</font></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Kecamatan</label>
+				<div class="controls">
+					<input class="span8" id="form-field-1" readonly value="{$data.kecamatan}" type="text">
+					<span class="help-inline"><font color='red'>Tidak Bisa Diubah</font></span>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Kode Pos</label>
+				<div class="controls">
+					<input id="form-field-1" name='kdpos' value="{$data.kode_pos}" type="text">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Alamat</label>
+				<div class="controls">
+					<textarea class="span8 validasi" id="form-field-8" name="alamatpalsu">{$data.alamat}</textarea>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">No. KTP</label>
+				<div class="controls">
+					<input class="span8" id="form-field-1" name='ktp' value="{$data.no_ktp}" type="text">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">No. Handphone</label>
+				<div class="controls">
+					<input class="span8 validasi" id="form-field-1" name='hp' value="{$data.no_handphone}" type="text">
+				</div>
+			</div>
+		</form>
+		<div class="form-actions">
+			<a class="btn btn-info" href='javascript:void(0);' id='simpanUpd'>
+				<i class="icon-ok bigger-110"></i>
+				Simpan
+			</a>
+			&nbsp; &nbsp; &nbsp;
+			<a class="btn btn-info" href='javascript:void(0);' id='cetak_kartu'>
+				<i class="icon-ok bigger-110"></i>
+				Cetak Kartu
+			</a>
+			&nbsp; &nbsp; &nbsp;
+		</div>
+	</div>
+</div>
+
+<script>
+	$(".validasi").validatebox({ required:true }); 		
+	$('#simpanUpd').on('click', function(){
+		validasi = $('#upsbro').form('validate');
+		if(validasi){
+			$.blockUI({ message: '<h3>Processing Data...</h3>' });			
+		}
+		
+		submit_form('upsbro',function(r){
+			if(r == 1){
+				$('#modalencuk').html('Profil Anda Sudah Diubah.');				
+				$('#pesanModal').modal('show');
+				$.unblockUI();
+			}else{
+				$('#modalencuk').html(r);				
+				$('#pesanModal').modal('show');
+				$.unblockUI();
+			}
+			
+			loadUrl('{$host}user-profile');$('#judul_kecil').html('Profil User');
+		});
+		return false;
+	});
+	$('#cetak_kartu').on('click', function(){
+		var post = {};
+		post['email'] = "{$data.email_address}";
+		openWindowWithPost(host+'cetak-kartu', post);
+	});
+</script>

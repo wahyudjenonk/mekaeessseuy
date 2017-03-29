@@ -1,0 +1,140 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<title>Aldeaz Marketing App</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<link href="{$host}__assets/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="{$host}__assets/css/bootstrap-responsive.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="{$host}__assets/easyui/themes/metro-gray/easyui.css" />
+	<link rel="stylesheet" href="{$host}__assets/form/css/demo.css" />
+	<link rel="stylesheet" href="{$host}__assets/form/css/sky-forms.css" />
+	<script>
+		host = "{$host}";
+	</script>
+	<script src="{$host}__assets/js/jquery.min.js"></script>
+	<script src="{$host}__assets/js/bootstrap.min.js"></script>
+	<script src="{$host}__assets/easyui/jquery.easyui.min.js"></script>	
+	<script src="{$host}__assets/js/blockui.js"></script>	
+	<script src="{$host}__assets/js/jquery.numeric.js"></script>		
+	<script src="{$host}__assets/js/fungsi.js"></script>
+</head>
+<body class="bg-orange">
+	<div class="body body-s">
+		<form class="sky-form" id='regsbro' name='frmRegister' url="{$host}submit-register" enctype="multipart/form-data" method="post">
+			<header><center><img src='{$host}__assets/img/logo-aldeaz.png' /></center></header>
+			<fieldset>
+				<section>
+					<label class="input">
+						<input type="text" name='edMail' class='validasi emailbro' placeholder="Alamat Email" />
+					</label>
+				</section>
+				<section>
+					<label class="input">
+						<input type="text" name='edNmLengkap' class='validasi' placeholder="Nama Lengkap" />
+					</label>
+				</section>
+				<section>
+					<label class="select">
+						<select id='edProvID' name='edProvID' class='validasi'>
+							<option value="0" selected disabled>Provinsi</option>
+							{$cl_provinsi_id}
+						</select>
+						<i></i>
+					</label>
+				</section>
+				<section>
+					<label class="select">
+						<select id='edKabKotaID' name='edKabKotaID' class='validasi'>
+							<option value="0" selected disabled>Kab/Kota</option>
+						</select>
+						<i></i>
+					</label>
+				</section>
+				<section>
+					<label class="select">
+						<select id='edKecID' name='edKecID' class='validasi'>
+							<option value="0" selected disabled>Kecamatan</option>
+						</select>
+						<i></i>
+					</label>
+				</section>
+				<section>
+					<label class="input">
+						<input type="text" name='edKdPos' class='validasi' placeholder="Kode Pos" />
+					</label>
+				</section>
+				<section>
+					<label class="textarea">
+						<textarea name='edAlamatLengkap' class='validasi' placeholder="Alamat"></textarea>
+					</label>
+				</section>
+				<section>
+					<label class="input">
+						<input name='edNoHP' class='validasi numberbro' type="text" placeholder="No. Handphone" />
+					</label>
+				</section>
+			</fieldset>
+			<footer>
+				<a type="submit" id='dfsekarang' class="button">Daftar Sekarang</a>
+				<a href='{$host}' class="button button-secondary">Masuk</a>
+			</footer>
+		</form>
+	</div>
+	
+	<!-- Modal -->
+	<div style='z-index:9999999 !important;' class="modal fade" id="pesanModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<b>Aldeaz Sejahtera Printing</b>
+					<button id='button_close' type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<div id='modalencuk' class="modal-product">
+					</div> <!-- .modal-product -->
+				</div> <!-- .modal-body -->
+			</div> <!-- .modal-content -->
+		</div> <!-- .modal-dialog -->
+	</div>
+	<!-- END Modal -->
+	
+</body>
+	<script>
+		$(".validasi").validatebox({ required:true }); 		
+		$(".emailbro").validatebox({ validType:'email' });
+		$(".numberbro").numeric();		
+		
+		$('#edProvID').on('change', function(){
+			fillCombo('{$host}getkab', 'edKabKotaID', "", $(this).val());
+		});
+		
+		$('#edKabKotaID').on('change', function(){
+			fillCombo('{$host}getkec', 'edKecID', "", $(this).val());
+		});
+		
+		$('#dfsekarang').on('click', function(){
+			validasi = $('#regsbro').form('validate');
+			if(validasi){
+				$.blockUI({ message: '<h3>Processing Data...</h3>' });			
+			}
+			
+			submit_form('regsbro',function(r){
+				if(r == 1){
+					$('#modalencuk').html('Registrasi Berhasil, Silahkan Cek Email Anda.');				
+					$('#pesanModal').modal('show');
+					$.unblockUI();
+					setTimeout(function () {
+						window.location.href = "{$host}"; 
+					}, 4000);
+				}else{
+					$('#modalencuk').html(r);				
+					$('#pesanModal').modal('show');
+					$.unblockUI();
+				}
+			});
+			
+			return false;
+		});
+	</script>
+</html>

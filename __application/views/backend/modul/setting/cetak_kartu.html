@@ -1,0 +1,112 @@
+{literal}
+<style type="text/css">
+table.gridtable {
+	font-family: verdana,arial,sans-serif;
+	font-size:12px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	font-family: verdana,arial,sans-serif;
+	font-size:12px;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	font-family: verdana,arial,sans-serif;
+	font-size:12px;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+</style>
+{/literal}
+
+<table width="100%">
+	<tr>
+		<td style="width: 35%; height: 50px;"><img src='__assets/img/logo_aldeaz_baru.png' width='200px' /></td>
+		<td style="width: 50%; height: 80px; color: #00000; text-align: center; " valign="middle">
+			<div style="font-family:arial; font-weight:bold;">		
+				<h3>KOORDINATOR WILAYAH</h3>
+				<b>NO : {$data_profil.member_user}</b>
+			</div>
+		</td>
+		<td style="width: 15%; height: 80px;" align='right'>
+			<img src='__assets/img/qr.png' width='70px' height='70px' />
+		</td>
+	</tr>
+</table>
+
+<table width="100%" style='margin-top:10px;margin-bottom:10px;font-family:helvetica,arial,verdana,sans; font-size:12px;'>
+	<tr>
+		<td width='20%' >Nama</td>
+		<td width='5%' >:</td>
+		<td width='75%'>{$data_profil.nama_lengkap}</td>
+	</tr>
+	<tr>
+		<td>Nomor Identitas</td>
+		<td>:</td>
+		<td>{$data_profil.no_ktp|default:'-'}</td>
+	</tr>
+	<tr>
+		<td>Alamat</td>
+		<td>:</td>
+		<td>{$data_profil.alamat|default:'-'}</td>
+	</tr>
+	<tr>
+		<td>Telephone/Handphone</td>
+		<td>:</td>
+		<td>{$data_profil.no_handphone|default:'-'}</td>
+	</tr>
+	<tr>
+		<td>Wilayah Kerjasama</td>
+		<td>:</td>
+		<td>{$data_profil.provinsi|default:'-'}</td>
+	</tr>
+</table>
+<p style='font-family:helvetica,arial,verdana,sans; font-size:12px;'> 
+	Bahwa nama dengan identitas seperti tercantum diatas merupakan mitra kerja dari  CV.ALDEAZ SEJAHTERA PRINTING 
+	dalam pelaksanaan pengadaan buku kurikulum 2013 semester 2 sesuai dengan surat lkpp…
+	<br/>
+	Demikian untuk dapat dimaklumi.
+</p>
+<p style='font-family:helvetica,arial,verdana,sans; font-size:12px; font-weight:bold;'> 
+	DEPOK, {$smarty.now|date_format:"%d %b %Y"|default:'-'}
+</p>
+<table width="100%" style='font-family:helvetica,arial,verdana,sans; font-size:12px;'>
+	<tr>
+		<td style="width: 35%; height: 80px;" align='left'>
+			<img src='__assets/img/tandatangan.png' width='100px' height='50px' />
+			<br/>
+			<br/>
+			<b>HADI GUNOWO</b>
+			<br/>
+			Direktur
+		</td>
+	</tr>	
+</table>
+<br/>
+<table width="100%">
+	<tr>
+		<td style="width: 20%; height: 50px;"><img src='__assets/img/logo-aldeaz.png' width='150px' /></td>
+		<td style="width: 80%; height: 80px; color: #00000;" >
+			<div style="font-family:helvetica,arial,verdana,sans; font-size:12px;">		
+				<b>CV ALDEAZ SEJAHTERA PRINTING</b>
+				<br/>
+				Jl. Merdeka No. 100 Abadijaya - Kecamatan Sukmajaya - Kota Depok - Provinsi Jawa Barat 16417
+				<br/>
+				Telp/faks. 021. 7701525, email: aldeaz.id@gmail.com, website: www.aldeaz.id
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+
