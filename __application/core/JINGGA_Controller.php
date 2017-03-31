@@ -12,7 +12,7 @@ class JINGGA_Controller extends CI_Controller {
 		header("Cache-Control: private");
 		header("Pragma: no-cache");
 		
-		$this->auth = unserialize(base64_decode($this->session->userdata('44mpp3R4')));
+		$this->auth = unserialize(base64_decode($this->session->userdata('mksmarketing')));
 		$this->host	= $this->config->item('base_url');
 		$host = $this->host;
 		$this->nsmarty->assign('host',$this->host);

@@ -1,0 +1,140 @@
+<div class="page-header position-relative">
+	<h1>
+		Form Registrasi Sales
+	</h1>
+</div>
+<div class="row-fluid">
+	<div class="span12">
+		<form class="form-horizontal" id='frmsls' name='frmsls' url="{$host}submit-sales" enctype="multipart/form-data" method="post">
+			<input type="hidden" name="editstatus" value="{$sts|default:'add'}">
+			<input type="hidden" name="id" value="{$data.id|default:''}">
+			{if $sts eq "edit"}
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Kode Marketing</label>
+				<div class="controls">
+					<input class="span8" id="form-field-1" readonly value="{$data.registration_code|default:''}" type="text">
+					<span class="help-inline"><font color='red'>Tidak Bisa Diubah</font></span>
+				</div>
+			</div>			
+			{/if}
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Nama Lengkap</label>
+				<div class="controls">
+					<input id="form-field-1" class="span8 validasi" name='nlengkap' value="{$data.nama_lengkap|default:''}" type="text">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Alamat Email</label>
+				<div class="controls">
+					<input class="span8 validasi" id="email" name="alamat_email" value="{$data.email_address|default:''}" type="text">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Provinsi</label>
+				<div class="controls">
+					<select class="span8 validasi" id="prv" name="prv">
+						{$combo_prov}
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Kab/Kota</label>
+				<div class="controls">
+					<select class="span8 validasi" id="kab" name="kab">
+						{$combo_kab}
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Kecamatan</label>
+				<div class="controls">
+					<select class="span8 validasi" id="kec" name="kec">
+						{$combo_kec}
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Kode Pos</label>
+				<div class="controls">
+					<input id="form-field-1" name='kdpos' value="{$data.kode_pos|default:''}" type="text">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Alamat</label>
+				<div class="controls">
+					<textarea class="span8 validasi" id="form-field-8" name="alamatpalsu">{$data.alamat|default:''}</textarea>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">No. KTP</label>
+				<div class="controls">
+					<input class="span8" id="form-field-1" name='ktp' value="{$data.no_ktp|default:''}" type="text">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">No. Handphone</label>
+				<div class="controls">
+					<input class="span8 validasi" id="form-field-1" name='hp' value="{$data.no_handphone|default:''}" type="text">
+				</div>
+			</div>
+		</form>
+		<div class="form-actions">
+			<a class="btn btn-info" href='javascript:void(0);' id='simpanSales'>
+				Simpan
+			</a>
+			&nbsp; &nbsp; &nbsp;
+			<a class="btn btn-danger" href='javascript:void(0);' id='kembaliSales'>
+				Kembali
+			</a>
+			&nbsp; &nbsp; &nbsp;
+		</div>
+	</div>
+</div>
+
+<script>
+	$(".validasi").validatebox({ required:true }); 		
+	
+	$('#prv').bind('change', function(){
+		fillCombo(host+'getkab', 'kab', '', $(this).val() );
+	});
+	$('#kab').on('change', function(){
+		fillCombo(host+'getkec', 'kec', '', $(this).val() );
+	});
+	
+	$('#simpanSales').on('click', function(){
+		validasi = $('#frmsls').form('validate');
+		submit_form('frmsls',function(r){
+			if(r == 1){
+				$('#modalencuk').html('Sukses Input Registrasi.');				
+				$('#pesanModal').modal('show');
+				$('.info-empty').remove();
+			}else if(r == 2){
+				$('#modalencuk').html('Alamat Email Sudah Ada Dalam Sistem!');				
+				$('#pesanModal').modal('show');
+			}else{
+				$('#modalencuk').html(r);				
+				$('#pesanModal').modal('show');
+			}
+			
+			$('#grid_nya_sales').show();
+			$('#detil_nya_sales').empty().hide();
+			$('#grid_sales').datagrid('reload');
+		});
+		return false;
+	});
+	
+	$('#kembaliSales').on('click', function(){
+		$('#grid_nya_sales').show();
+		$('#detil_nya_sales').empty().hide();
+		$('#grid_sales').datagrid('reload');
+	});
+	
+	
+	/*
+	$('#cetak_kartu').on('click', function(){
+		var post = {};
+		post['email'] = "{$data.email_address}";
+		openWindowWithPost(host+'cetak-kartu', post);
+	});
+	*/
+</script>

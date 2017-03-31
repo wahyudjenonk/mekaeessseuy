@@ -1,0 +1,52 @@
+<div id="grid_nya_{$mod}" style="width:100%">
+	<div style='margin-bottom:3px;background:#F9F9F9;padding:10px;'>
+		<label style='width:100px;'>Nama Sales</label>
+		<input type="text" id="nm_sekolah_{$acak}" style="width:250px;">
+		
+		&nbsp;&nbsp;&nbsp;
+		<a href="javascript:void(0)" style='margin-top:-10px' id='search_adv' class="l-btn l-btn-small l-btn-plain" group="" onClick="advancedSearch('advanced_search', 'tbl_upload_file_advanced_search', '{$acak}');">
+			<span class="l-btn-left l-btn-icon-left">
+				<span class="l-btn-text">Cari</span><span class="l-btn-icon icon-search">&nbsp;</span>
+			</span>
+		</a>	
+		&nbsp;&nbsp;&nbsp;
+		<a href="javascript:void(0)" style='margin-top:-10px' class="l-btn l-btn-small l-btn-plain" group="" onClick="advancedSearch('advanced_search', 'tbl_upload_file_advanced_search', '{$acak}', 'balikin');">
+			<span class="l-btn-left l-btn-icon-left">
+				<span class="l-btn-text">Refresh Data</span><span class="l-btn-icon icon-reload">&nbsp;</span>
+			</span>
+		</a>
+		<br />
+		<div style="height:16px;">		
+			<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="genform('add', '{$mod}','{$mod}');">
+				<span class="l-btn-left l-btn-icon-left">
+					<span class="l-btn-text">Tambah</span><span class="l-btn-icon icon-add">&nbsp;</span>
+				</span>
+			</a>		
+			&nbsp;			
+			<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="genform('edit', '{$mod}','{$mod}');">
+				<span class="l-btn-left l-btn-icon-left">
+					<span class="l-btn-text">Edit</span><span class="l-btn-icon icon-edit">&nbsp;</span>
+				</span>
+			</a>
+			&nbsp;
+			<a href="javascript:void(0)" style='' class="l-btn l-btn-small l-btn-plain" group="" id="" onClick="genform('delete', '{$mod}','{$mod}');">
+				<span class="l-btn-left l-btn-icon-left">
+					<span class="l-btn-text">Hapus</span><span class="l-btn-icon icon-no">&nbsp;</span>
+				</span>
+			</a>			
+		</div>
+		<br />
+	</div>	
+	{include file="backend/template/grid-2.html" main="sales" table='sales' height_grid="(getClientHeight()-205)"}
+</div>
+<div id='detil_nya_{$mod}' width='100%'></div>
+
+
+<script>	
+	$(document).keypress(function(e) {
+		if(e.which == 13) {
+			//advancedSearch('advanced_search', 'tbl_upload_file_advanced_search', '{$acak}');
+			$('#search_adv').trigger('click');
+		}
+	});
+</script>

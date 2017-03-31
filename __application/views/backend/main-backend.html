@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>Aldeaz Marketing App</title>
+		<title>MKS-Store Marketing App</title>
 		<link rel="shortcut icon" type="image/x-icon" href="{$host}__assets/ef/img/favicon.png"/>  
 
 		<meta name="description" content="overview &amp; stats" />
@@ -25,7 +25,9 @@
 		<link rel="stylesheet" href="{$host}__assets/css/main_style.css" />
 		
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnOo-qFl3VL_r5oj_N_1RWzx7Cpq432Qc" async defer></script>
-		
+		<script>
+			var role = "{$auth.role|default:''}";
+		</script>
 		<!--script src="{$host}__assets/plugin/tinymce/js/tinymce/tinymce.min.js"></script-->
 	</head>
 	<body class="navbar-fixed">
@@ -33,9 +35,7 @@
 			<div class="navbar-inner">
 				<div class="container-fluid">
 					<a href="#" class="brand">
-						<i class="icon-bar-chart"></i>
-						Aldeaz Marketing
-						{* <img width="150px" style='height:40px !important;' src="{$host}__assets/img/logo.png" class="navbar-brand" href="#"> *}
+						<img src="{$host}__assets/img/logo_mks.png" width='90px' style='height:35px !important;margin-left:7px;' class="navbar-brand"/>
 					</a><!--/.brand-->
 					
 					<ul class="nav ace-nav pull-right">
@@ -78,7 +78,9 @@
 							<a href="javascript:void(0);" id="judul_kecil">Home</a>
 						</li>
 					</ul><!--.breadcrumb-->
-
+					<span style='float:right;margin-right:10px;margin-top:5px;color:#6E8FD2;'>
+						{$auth.role|default:'-'} Marketing MKS-Store
+					</span>
 				</div>
 				<div class="page-content" >
 					

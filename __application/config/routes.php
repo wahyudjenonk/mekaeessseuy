@@ -9,6 +9,7 @@ $route['backoffice'] = 'backend';
 $route['backoffice-masuk'] = 'login';
 $route['backoffice-keluar'] = 'login/logout';
 $route['Backoffice-Grid/(:any)/(:any)'] = 'backend/get_grid/$1/$2';
+$route['backoffice-modul/(:any)/(:any)'] = 'backend/modul/$1/$2';
 $route['backoffice-GetDataChart'] = 'backend/get_chart';
 $route['Backoffice-Status/(:any)'] = 'backend/set_flag/$1';
 $route['backoffice-form/(:any)'] = 'backend/get_form/$1';
@@ -20,8 +21,8 @@ $route['backoffice-simpan/(:any)/(:any)'] = 'backend/simpandata/$1/$2';
 $route['beranda'] = 'backend/modul/beranda/main';
 $route['registrasi'] = 'login/viewregistrasi';
 $route['submit-register'] = 'login/submitregistrasi';
-$route['getkab'] = 'login/getcombo/cl_kab_kota';
-$route['getkec'] = 'login/getcombo/cl_kecamatan';
+$route['getkab'] = 'backend/getcombo/cl_kab_kota';
+$route['getkec'] = 'backend/getcombo/cl_kecamatan';
 $route['backoffice-Cetak'] = 'backend/cetak';
 
 $route['forgotpassword'] = 'login/viewlupapassword';
@@ -29,6 +30,7 @@ $route['submit-lupapassword'] = 'login/submitlupapassword';
 
 $route['user-profile'] = 'backend/getdisplay/user_profile';
 $route['submit-ubahprofil'] = 'backend/simpandata/update_profile/edit';
+$route['submit-sales'] = 'backend/simpandata/registrasi_sales';
 $route['ubah-password'] = 'backend/getdisplay/ubah_password';
 $route['submit-ubahpassword'] = 'backend/simpandata/ubah_password/edit';
 $route['cetak-kartu'] = 'backend/generatepdf/cetak_kartu';

@@ -3,100 +3,21 @@
 		<li>
 			<a href="javascript:void(0);" onclick="loadUrl('{$host}beranda');$('#judul_kecil').html('Dashboard App')">
 				<i class="icon-bar-chart"></i>
-				<span class="menu-text">Dashboard</span>
+				<span class="menu-text">Beranda</span>
 			</a>
 		</li>
-		
-		
 		<li>
-			<a href="javascript:void(0);"  class="dropdown-toggle" >
+			<a href="javascript:void(0);" onclick="loadUrl('{$host}backoffice-modul/transaksi/penjualan');$('#judul_kecil').html('Transaksi Penjualan Buku MKS-Store')">
 				<i class="icon-briefcase"></i>
-				<span class="menu-text">Data Transaksi</span>
-				<b class="arrow icon-angle-down"></b>
+				<span class="menu-text">Penjualan</span>
 			</a>
-			<ul class="submenu">
-				<li>
-					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Grid/trans_buku_sekolah/B');$('#judul_kecil').html('Transaksi Aldeaz Buku Sekolah')">
-						<i class="icon-double-angle-right"></i>
-						<span class="menu-text">Transaksi Buku Sekolah</span>
-					</a>
-				</li>
-				<li>
-					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Grid/trans_buku_umum/B');$('#judul_kecil').html('Transaksi Aldeaz Buku Umum')">
-						<i class="icon-double-angle-right"></i>
-						<span class="menu-text">Transaksi Buku Umum</span>
-					</a>
-				</li>
-				<li>
-					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Grid/trans_media_sekolah/M');$('#judul_kecil').html('Transaksi Aldeaz Media Sekolah')">
-						<i class="icon-double-angle-right"></i>
-						<span class="menu-text">Transaksi Media Sekolah</span>
-					</a>
-				</li>
-				<li>
-					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Grid/trans_media_umum/M');$('#judul_kecil').html('Transaksi Aldeaz Media Umum')">
-						<i class="icon-double-angle-right"></i>
-						<span class="menu-text">Transaksi Media Umum</span>
-					</a>
-				</li>
-				
-			</ul>
 		</li>
 		<li>
-			<a href="javascript:void(0);"  class="dropdown-toggle" >
-				<i class="icon-briefcase"></i>
-				<span class="menu-text">Monitoring</span>
-				<b class="arrow icon-angle-down"></b>
-			</a>
-			<ul class="submenu">
-				<li>
-					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Grid/monitoring_buku/B');$('#judul_kecil').html('Monitoring Order Buku ')">
-						<i class="icon-double-angle-right"></i>
-						<span class="menu-text">Monitoring Order Buku</span>
-					</a>
-				</li>
-				<li>
-					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Grid/monitoring_media/M');$('#judul_kecil').html('Monitoring Order Media')">
-						<i class="icon-double-angle-right"></i>
-						<span class="menu-text">Monitoring Order Media</span>
-					</a>
-				</li>
-			</ul>
-		</li>
-		<li>
-			<a href="javascript:void(0);"  class="dropdown-toggle" >
+			<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Report/inv_buku');$('#judul_kecil').html('Report Invoice Buku')">
 				<i class="icon-book"></i>
-				<span class="menu-text">Report</span>
-				<b class="arrow icon-angle-down"></b>
+				<span class="menu-text">Laporan</span>
 			</a>
-			<ul class="submenu">
-				<li>
-					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Report/inv_buku');$('#judul_kecil').html('Report Invoice Buku')">
-						<i class="icon-double-angle-right"></i>
-						<span class="menu-text">Report Buku Invoice</span>
-					</a>
-				</li>
-				<li>
-					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Report/inv_detil_buku');$('#judul_kecil').html('Report Invoice Detil Buku')">
-						<i class="icon-double-angle-right"></i>
-						<span class="menu-text">Report Buku Detil Invoice</span>
-					</a>
-				</li>
-				<li>
-					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Report/inv_media');$('#judul_kecil').html('Report Invoice Media')">
-						<i class="icon-double-angle-right"></i>
-						<span class="menu-text">Report Media Invoice</span>
-					</a>
-				</li>
-				<li>
-					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Report/inv_detil_media');$('#judul_kecil').html('Report Invoice Detil Media')">
-						<i class="icon-double-angle-right"></i>
-						<span class="menu-text">Report Media Detil Invoice</span>
-					</a>
-				</li>
-			</ul>
-		</li>
-		
+		</li>		
 		<li>
 			<a href="javascript:void(0);"  class="dropdown-toggle" >
 				<i class="icon-cog"></i>
@@ -107,9 +28,17 @@
 				<li>
 					<a href="javascript:void(0);" onclick="loadUrl('{$host}user-profile');$('#judul_kecil').html('Profil User')">
 						<i class="icon-double-angle-right"></i>
-						<span class="menu-text">Profil User</span>
+						<span class="menu-text">Profil Saya</span>
 					</a>
 				</li>
+				{if $auth.role eq "PIC"}
+				<li>
+					<a href="javascript:void(0);" onclick="loadUrl('{$host}backoffice-modul/setting/sales');$('#judul_kecil').html('Registrasi Sales')">
+						<i class="icon-double-angle-right"></i>
+						<span class="menu-text">Registrasi Sales</span>
+					</a>
+				</li>
+				{/if}
 				<li>
 					<a href="javascript:void(0);" onclick="loadUrl('{$host}ubah-password');$('#judul_kecil').html('Ubah Password')">
 						<i class="icon-double-angle-right"></i>

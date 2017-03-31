@@ -140,24 +140,10 @@ class Lib {
 			'charset' => 'utf-8',
             'wordwrap' => TRUE,
 		);
-		
-		/*
-		$config = array(
-			"protocol"	=>"smtp"
-			,"mailtype" => "html"
-			,"smtp_host" => "ssl://smtp.gmail.com"
-			,"smtp_user" => "aldeaz.id@gmail.com"
-			,"smtp_pass" => "merdeka18"
-			,"smtp_port" => "465",
-			'charset' => 'utf-8',
-            'wordwrap' => TRUE,
-		);
-		*/
-		//,"smtp_user" => "aldeaz.id@gmail.com","smtp_pass" => "merdeka18" */
-		
+				
 		$ci->email->initialize($config);
 		//$ci->email->from("aldeaz.id@gmail.com", "Aldeaz Notifikasi");
-		$ci->email->from("webstore@aldeaz.id", "Aldeaz Notifikasi");
+		$ci->email->from("notification@mks-store.id", "MKS-Store Notifikasi");
 		$ci->email->to($email);
 		$ci->email->subject($subject);
 		$ci->email->message($html);

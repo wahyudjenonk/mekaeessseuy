@@ -30,6 +30,12 @@ class Backend extends JINGGA_Controller {
 					//echo "<pre>";print_r($data);
 					$this->nsmarty->assign('data',$data);
 				break;
+				case "transaksi":
+					
+				break;
+				case "setting":
+					
+				break;
 			}
 			
 			$this->nsmarty->assign("main", $p1);
@@ -104,85 +110,6 @@ class Backend extends JINGGA_Controller {
 				//echo "<pre>";print_r($data);
 				$this->nsmarty->assign('data',$data);
 			break;
-			case "reservation":
-				$data=$this->mbackend->getdata('data_reservasi','result_array');
-				$this->nsmarty->assign('data',$data);
-			break;
-			case "confirm_independent":
-				$data=$this->mbackend->getdata('confirmation_independent','get');
-				$this->nsmarty->assign('data',$data);
-			break;
-			case "confirm_package":
-				$data=$this->mbackend->getdata('confirmation_package','get');
-				$this->nsmarty->assign('data',$data);
-			break;
-			case "registration":
-				$data=$this->mbackend->getdata('registration','get');
-				$this->nsmarty->assign('data',$data);
-			break;
-			case "member":
-				$data=$this->mbackend->getdata('member','get');
-				$this->nsmarty->assign('data',$data);
-			break;
-			case "property":
-				$data=$this->mbackend->getdata('property','get');
-				$this->nsmarty->assign('data',$data);
-			break;
-			case "pricing":
-			case "package":
-				
-				$data=$this->mbackend->getdata('services_master','result_array',$mod);
-				$this->nsmarty->assign('data',$data);
-				
-			break;
-			case "package_detil":
-				$data=$this->mbackend->getdata('package_header','result_array');
-				$this->nsmarty->assign('data',$data);
-				$this->nsmarty->assign('id_header',$this->input->post('id'));
-				//$this->nsmarty->assign('id_parent',$this->input->post('id'));
-			break;
-			case "package_item":
-				$data=$this->mbackend->getdata('package_item','result_array');
-				$this->nsmarty->assign('data',$data);
-				//print_r($data);
-				$this->nsmarty->assign('tbl_package_header_id',$this->input->post('id'));
-			break;
-			case "pricing_detil":
-				$data=$this->mbackend->getdata('services_detil','result_array');
-				$this->nsmarty->assign('data',$data);
-				$this->nsmarty->assign('id_parent',$this->input->post('id'));
-			break;
-			case "invoice":
-			case "planning":
-				$data=$this->mbackend->getdata('invoice','get');
-				$this->nsmarty->assign('data',$data);
-			break;
-			case "invoice_package":
-			case "planning_package":
-			case "planning_package_own":
-				$data=$this->mbackend->getdata('invoice_package','get');
-				$this->nsmarty->assign('data',$data);
-			break;
-			case "planning_detil":
-				$data=$this->mbackend->getdata('planning','get_data');
-				$this->nsmarty->assign('data',$data);
-				$total_row=(int)$this->input->post("jml_row");
-				$sisa_row=((int)$this->input->post("jml_row")-(int)$data['jml_data']);
-				$this->nsmarty->assign('total_row',$total_row);
-				$this->nsmarty->assign('sisa_row',$sisa_row);
-				$this->nsmarty->assign('tbl_detail_transaction_id',$this->input->post('id_detil_trans'));
-			break;
-			case "planning_package_detil":
-			case "planning_package_own_detil":
-				$data=$this->mbackend->getdata('planning_package','get_data');
-				$this->nsmarty->assign('data',$data);
-				$total_row=(int)$this->input->post("jml_row");
-				$sisa_row=((int)$this->input->post("jml_row")-(int)$data['jml_data']);
-				$this->nsmarty->assign('total_row',$total_row);
-				$this->nsmarty->assign('sisa_row',$sisa_row);
-				$this->nsmarty->assign('tbl_transaction_package_id',$this->input->post('id_header'));
-				$this->nsmarty->assign('tbl_package_detil_id',$this->input->post('id_detil_trans'));
-			break;
 		}
 		$this->nsmarty->assign('temp',$temp);
 		if(!file_exists($this->config->item('appl').APPPATH.'views/'.$temp)){$this->nsmarty->display('konstruksi.html');}
@@ -192,74 +119,18 @@ class Backend extends JINGGA_Controller {
 		$temp='backend/form/'.$mod.".html";
 		$sts=$this->input->post('editstatus');
 		$this->nsmarty->assign('sts',$sts);
+		
+		if($sts=='edit'){
+			$data=$this->mbackend->getdata($mod,'get');
+			$this->nsmarty->assign('data',$data);
+		}
+		
 		switch($mod){
-			case "reservation":
-				if($sts=='edit'){
-					$data=$this->mbackend->getdata('reservation','get');
-					$this->nsmarty->assign('data',$data);
-					$this->nsmarty->assign('tbl_transaction_package_id',$data['tbl_transaction_package_id']);
-					$this->nsmarty->assign('tbl_package_detil_id',$data['tbl_package_detil_id']);
-					$this->nsmarty->assign('tbl_package_header_id',$data['tbl_package_header_id']);
-				}else{
-					$this->nsmarty->assign('tbl_transaction_package_id',$this->input->post("id_trans"));
-					$this->nsmarty->assign('tbl_package_detil_id',$this->input->post("id_detil"));
-					$this->nsmarty->assign('tbl_package_header_id',$this->input->post("id_pack_header"));
-				}
-			break;
-			case "services":
-				if($sts!='add_new'){
-					$data=$this->mbackend->getdata('services','row_array');
-					$this->nsmarty->assign('data',$data);
-					$this->nsmarty->assign('pid',$this->input->post('pid'));
-					$this->nsmarty->assign('id',$this->input->post('id'));
-				}
-			break;
-			case "pricing":
-				
-				$data=$this->mbackend->getdata('pricing','row_array');
-				$this->nsmarty->assign('data',$data);
-				$this->nsmarty->assign('tbl_services_id',$this->input->post("id_parent"));
-				if($sts=='edit'){$this->nsmarty->assign('id',$this->input->post("id_price"));}
-			break;
-			case "planning":
-				if($sts=='edit'){
-					$data=$this->mbackend->getdata('planning','get');
-					$this->nsmarty->assign('data',$data);
-				}
-				$this->nsmarty->assign('tbl_detail_transaction_id',$this->input->post("detil_id"));
-			break;
-			case "planning_package":
-				if($sts=='edit'){
-					$data=$this->mbackend->getdata('planning_package','get');
-					$this->nsmarty->assign('data',$data);
-				}
-				$this->nsmarty->assign('tbl_package_detil_id',$this->input->post("detil_id"));
-				$this->nsmarty->assign('tbl_transaction_package_id',$this->input->post("header_id"));
-			break;
-			case "package":
-				$data_service=$this->mbackend->getdata('services_master','get');
-				$this->nsmarty->assign('data_service',$data_service);
-				if($sts=='edit'){
-					$data=$this->mbackend->getdata('package_header','get');
-					$this->nsmarty->assign('data',$data);
-				}
-				$this->nsmarty->assign('tbl_services_id',$this->input->post("services_id"));
-			break;
-			case "package_item":
-				$price=$this->mbackend->getdata('package_services','result_array');
-				$this->nsmarty->assign('price',$price);
-				if($sts=='edit'){
-					$data=$this->mbackend->getdata('package_item','get');
-					$this->nsmarty->assign('data',$data);
-				}
-				$this->nsmarty->assign('tbl_package_header_id',$this->input->post("id_header"));
-			break;
-			default:
-				if($sts=='edit'){
-					$data=$this->mbackend->getdata($mod,'get');
-					$this->nsmarty->assign('data',$data);
-					//print_r($data);
-				}
+			case "sales":
+				$temp='backend/modul/setting/sales_form.html';
+				$this->nsmarty->assign('combo_prov', $this->lib->fillcombo('cl_provinsi', 'return', ($sts == 'edit' ? $data["cl_provinsi_id"] : "") ));
+				$this->nsmarty->assign('combo_kab', $this->lib->fillcombo('cl_kab_kota', 'return', ($sts == 'edit' ? $data["cl_kab_kota_id"] : ""), ($sts == 'edit' ? $data["cl_provinsi_id"] : "") ));
+				$this->nsmarty->assign('combo_kec', $this->lib->fillcombo('cl_kecamatan', 'return', ($sts == 'edit' ? $data["cl_kecamatan_id"] : ""), ($sts == 'edit' ? $data["cl_kab_kota_id"] : "") ));
 			break;
 		}
 		$this->nsmarty->assign('mod',$mod);
@@ -269,6 +140,11 @@ class Backend extends JINGGA_Controller {
 		else{$this->nsmarty->display($temp);}
 		
 	}
+	
+	function getcombo($type=""){
+		echo $this->lib->fillcombo($type, 'return');
+	}	
+	
 	function getdata($p1,$p2="",$p3=""){
 		echo $this->mbackend->getdata($p1,'json',$p3);
 	}
@@ -292,10 +168,6 @@ class Backend extends JINGGA_Controller {
 	}
 	
 	function test(){
-		/*$a = 'cl_komisi_id';
-		if (strpos($a, 'tipe') !== false) {
-			echo 'true';
-		}*/
 		$a=array
 		(
 			'id'=> 6,

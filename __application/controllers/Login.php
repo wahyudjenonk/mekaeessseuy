@@ -18,9 +18,9 @@ class Login extends JINGGA_Controller {
 			//print_r($cek_user);exit;
 			if(count($cek_user)>0){
 				if(isset($cek_user['status']) && $cek_user['status']==1){
-					//echo $this->encrypt->decode($cek_user['pwd']);exit;
-					if($pass == $this->encrypt->decode($cek_user['pwd'])){
-						$this->session->set_userdata('44mpp3R4', base64_encode(serialize($cek_user)));
+					//echo $this->encrypt->decode($cek_user['password']);exit;
+					if($pass == $this->encrypt->decode($cek_user['password'])){
+						$this->session->set_userdata('mksmarketing', base64_encode(serialize($cek_user)));
 					}else{
 						$error=true;
 						$this->session->set_flashdata('error', 'Password Tidak Benar');
@@ -45,7 +45,7 @@ class Login extends JINGGA_Controller {
 	function logout(){
 		//$log = $this->db->update('tbl_user', array('last_log_date'=>date('Y-m-d')), array('nama_user'=>$this->auth['nama_user']) );
 		//if($log){
-			$this->session->unset_userdata('44mpp3R4', 'limit');
+			$this->session->unset_userdata('mksmarketing', 'limit');
 			$this->session->sess_destroy();
 			header("Location: " . $this->host ."backoffice");
 		//}
@@ -132,10 +132,6 @@ class Login extends JINGGA_Controller {
 			echo 1;
 		}
 		
-	}
-	
-	function getcombo($type=""){
-		echo $this->lib->fillcombo($type, 'return');
 	}
 	
 }

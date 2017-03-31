@@ -3,7 +3,7 @@
 class Mbackend extends CI_Model{
 	function __construct(){
 		parent::__construct();
-		//$this->auth = unserialize(base64_decode($this->session->userdata('44mpp3R4')));
+		$this->auth = unserialize(base64_decode($this->session->userdata('mksmarketing')));
 		$this->db_remote='';
 	}
 	
@@ -15,7 +15,65 @@ class Mbackend extends CI_Model{
 		if($this->input->post('db_flag')){
 			$this->get_koneksi($this->input->post('db_flag'));
 		}
+		if($balikan=='get'){$where .=" AND A.id=".$this->input->post('id');}
+		
 		switch($type){
+			
+			case "sales":
+				$sql = "
+					SELECT A.*, B.provinsi, C.kab_kota, D.kecamatan,
+						DATE_FORMAT(A.registration_date,'%d %b %y %h:%i %p') as tgl_daftar
+					FROM tbl_registration A 
+					LEFT JOIN cl_provinsi B ON B.kode_prov = A.cl_provinsi_id
+					LEFT JOIN cl_kab_kota C ON C.kode_kab_kota = A.cl_kab_kota_id
+					LEFT JOIN cl_kecamatan D ON D.kode_kecamatan = A.cl_kecamatan_id
+					$where AND A.pic_id = ".$this->auth["id"]."
+				";
+			break;
+			case "penjualan":
+				if($this->auth["role"] == "PIC"){
+					$sqlsales = "
+						SELECT registration_code
+						FROM tbl_registration
+						WHERE pic_id = ".$this->auth["id"]."
+					";
+					$querysales = $this->db->query($sqlsales)->result_array();
+					$arraysales = array();
+					foreach($querysales as $k=>$v){
+						$arraysales[$k] = $v['registration_code'];
+					}
+					if($arraysales){
+						$join_array = join("','",$arraysales);
+						$where .= "
+							AND A.kode_marketing IN ('".$join_array."') 
+						";
+					}else{
+						$where .= "
+							AND A.kode_marketing = '".$this->auth['registration_code']."'
+						";
+					}
+				}else{
+					$where .= " AND A.kode_marketing='".$this->auth['registration_code']."' ";
+				}
+				
+				$sql = "
+					SELECT A.*, B.nama_sekolah, B.nama_lengkap 
+					FROM tbl_h_pemesanan A 
+					LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id = B.id 
+					".$where." AND B.jenis_pembeli = 'SEKOLAH'
+					ORDER BY A.id DESC
+				";
+				
+				//echo $sql;exit;
+			break;
+			case "data_login":
+				$sql = "
+					SELECT A.*
+					FROM tbl_registration A
+					WHERE username = '".$p1."'
+				";
+			break;
+
 			case "report":
 				$tgl_mulai=$this->input->post('start_date');
 				$tgl_akhir=$this->input->post('end_date');
@@ -229,15 +287,6 @@ class Mbackend extends CI_Model{
 				$data['detil']=$this->db_remote->query($sql)->result_array();
 				return $data;
 			break;
-			case "data_login":
-				$sql = "
-					SELECT A.member_user,A.email_address,A.flag AS status,A.pwd,B.*,
-					B.nama_lengkap
-					FROM tbl_member A
-					LEFT JOIN tbl_registration B ON A.tbl_registration_id=B.id
-					WHERE A.member_user = '".$p1."' OR A.email_address='".$p1."'
-				";
-			break;
 			case "trans_buku_sekolah":
 			case "trans_buku_umum":			
 			case "trans_media_sekolah":			
@@ -266,17 +315,15 @@ class Mbackend extends CI_Model{
 			break;
 			
 			default:
-				if($balikan=='get'){$where .=" AND A.id=".$this->input->post('id');}
 				$sql="SELECT A.* FROM ".$type." A ".$where;
-				if($balikan=='get')return $this->db->query($sql)->row_array();
 			break;
 		}
 		
 		if($balikan == 'json'){
 			if($this->input->post('db_flag')){
-				return $this->get_json_grid($sql,$this->input->post('db_flag'));
+				return $this->get_json_grid($type,$sql,$this->input->post('db_flag'));
 			}else{
-				return $this->get_json_grid($sql,'lokal');
+				return $this->get_json_grid($type,$sql,'lokal');
 			}
 			
 		}elseif($balikan == 'row_array'){
@@ -296,6 +343,8 @@ class Mbackend extends CI_Model{
 			}else{
 				return $this->db->query($sql)->result();
 			}
+		}elseif($balikan == 'get'){
+			return $this->db->query($sql)->row_array();
 		}elseif($balikan == 'result_array'){
 			if($this->input->post('db_flag')){
 				$data=$this->db_remote->query($sql)->result_array();
@@ -315,7 +364,7 @@ class Mbackend extends CI_Model{
 		   echo 'Koneksi Salah';exit;
 		}
 	}
-	function get_json_grid($sql,$koneksi){
+	function get_json_grid($type,$sql,$koneksi){
 		$page = (integer) (($this->input->post('page')) ? $this->input->post('page') : "1");
 		$limit = (integer) (($this->input->post('rows')) ? $this->input->post('rows') : "10");
 		if($koneksi!='lokal'){
@@ -336,6 +385,15 @@ class Mbackend extends CI_Model{
 		}
 		else{			
 			$data = $this->db->query($sql)->result_array();  
+		}
+		
+		if($type == "penjualan"){
+			if($this->auth["role"] == "PIC"){
+				foreach($data as $k => $v){
+					$cek_sales = $this->db->get_where("tbl_registration", array("registration_code"=>$v["kode_marketing"]) )->row_array();
+					$data[$k]["nama_sales"] = $cek_sales["nama_lengkap"];
+				}
+			}
 		}
 				
 		if($data){
@@ -360,6 +418,9 @@ class Mbackend extends CI_Model{
 			break;
 			case "cl_kab_kota":
 				$provinsi = $this->input->post('v2');
+				if(!$provinsi){
+					$provinsi = $p2;
+				}
 				$sql = "
 					SELECT kode_kab_kota as id, kab_kota as txt
 					FROM cl_kab_kota
@@ -368,6 +429,9 @@ class Mbackend extends CI_Model{
 			break;
 			case "cl_kecamatan":
 				$kab_kota = $this->input->post('v2');
+				if(!$kab_kota){
+					$kab_kota = $p2;
+				}
 				$sql = "
 					SELECT kode_kecamatan as id, kecamatan as txt
 					FROM cl_kecamatan
@@ -387,6 +451,51 @@ class Mbackend extends CI_Model{
 		}
 		
 		switch($table){
+			case "registrasi_sales":
+				$table = "tbl_registration";
+				$cek_email = $this->db->get_where("tbl_registration", array("email_address"=>$data['alamat_email']) )->row_array();
+				if($cek_email){
+					echo 2; //email sudah ada
+					exit;
+				}
+				
+				$this->load->library('encrypt');
+				
+				$pswd = strtolower($this->lib->randomString(6, 'angka'));
+				$member_user = $this->lib->randomString(5, 'huruf');
+				$cek_member_user = $this->db->get_where("tbl_registration", array("registration_code"=>strtoupper($member_user)) )->row_array();
+				if($cek_member_user){
+					$member_user = $this->lib->randomString(5, 'angkahuruf');
+				}
+				
+				$data['registration_date'] = date("Y-m-d H:i:s");
+				$data['nama_lengkap'] = $data['nlengkap'];
+				$data['cl_provinsi_id'] = $data['prv'];
+				$data['cl_kab_kota_id'] = $data['kab'];
+				$data['cl_kecamatan_id'] = $data['kec'];
+				$data['kode_pos'] = $data['kdpos'];
+				$data['alamat'] = $data['alamatpalsu'];
+				$data['no_ktp'] = $data['ktp'];
+				$data['no_handphone'] = $data['hp'];
+				$data['email_address'] = $data['alamat_email'];
+				$data['role'] = "SALES";
+				$data['registration_code'] = strtoupper($member_user);
+				$data['pic_id'] = $this->auth["id"];
+				$data['username'] = $data['alamat_email'];
+				$data['password'] = $this->encrypt->encode($pswd);
+				$data['status'] = 1;
+				$data['create_by'] = $this->auth["nama_lengkap"];
+				
+				unset($data['nlengkap']);
+				unset($data['prv']);
+				unset($data['kab']);
+				unset($data['kec']);
+				unset($data['kdpos']);
+				unset($data['alamatpalsu']);
+				unset($data['alamat_email']);
+				unset($data['ktp']);
+				unset($data['hp']);
+			break;
 			case "update_profile":
 				$table = "tbl_registration";
 				$arrayparam = array(
@@ -399,6 +508,9 @@ class Mbackend extends CI_Model{
 				$data['no_handphone'] = $data['hp'];
 				
 				unset($data['nlengkap']);
+				unset($data['prv']);
+				unset($data['kab']);
+				unset($data['kec']);
 				unset($data['kdpos']);
 				unset($data['alamatpalsu']);
 				unset($data['ktp']);
@@ -412,7 +524,7 @@ class Mbackend extends CI_Model{
 					exit;
 				}
 				
-				$table = "tbl_member";
+				$table = "tbl_registration";
 				$arrayparam = array(
 					"email_address" => $this->auth['email_address']
 				);
@@ -426,6 +538,9 @@ class Mbackend extends CI_Model{
 		switch ($sts_crud){
 			case "add":
 				$this->db->insert($table,$data);
+				if($table == "tbl_registration"){
+					$this->lib->kirimemail('email_register_sales', $data['email_address'], $pswd, strtoupper($member_user), $data['nama_lengkap'] );
+				}
 			break;
 			case "edit":
 				$this->db->update($table, $data, $arrayparam);
