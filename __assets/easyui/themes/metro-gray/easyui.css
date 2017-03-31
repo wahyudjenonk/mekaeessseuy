@@ -1,4 +1,4 @@
-.panel {
+140.panel {
   overflow: hidden;
   text-align: left;
   margin: 0;
@@ -1364,7 +1364,7 @@
 }
 .datagrid-header-rownumber,
 .datagrid-cell-rownumber {
-  width: 30px;
+  width: 70px;
   text-align: center;
   margin: 0;
   padding: 0;
@@ -1408,6 +1408,8 @@
   padding: 0;
   width: 15px;
   height: 18px;
+  opacity: 1;
+  position:unset;
 }
 .datagrid-resize-proxy {
   position: absolute;

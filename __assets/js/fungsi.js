@@ -238,12 +238,50 @@ function genGrid(modnya, divnya, lebarnya, tingginya, par1,db_flag){
 	var doble_klik=false;
 	var pagesizeboy = 10;
 	var singleSelek = true;
-	var nowrap_nya = true;
+	var nowrap = true;
 	var footer=false;
 	if(db_flag != undefined){
 		param['db_flag']=db_flag;
 	}
 	switch(modnya){
+		case "sales":
+			urlnya = modnya;
+			fitnya = true;
+			nowrap = false;
+			row_number = true;
+			urlglobal = host+'backoffice-Data/'+urlnya;
+			frozen[modnya] = [];
+			kolom[modnya] = [	
+				{field:"nama_lengkap",title:'<b>Nama Sales</b>',width:200, halign:'center',align:'left'},
+				{field:'tgl_daftar',title:'<b>Tgl. Daftar</b>',width:150, halign:'center',align:'center'},						
+				{field:'provinsi',title:'<b>Provinsi</b>',width:150, halign:'center',align:'left'},						
+				{field:'kab_kota',title:'<b>Kabupaten</b>',width:150, halign:'center',align:'left'},						
+				{field:'kecamatan',title:'<b>Kecamatan</b>',width:150, halign:'center',align:'left'},						
+				{field:'alamat',title:'<b>Alamat</b>',width:350, halign:'center',align:'left'},						
+			];
+		break;		
+		case "penjualan":
+			urlnya = modnya;
+			fitnya = true;
+			nowrap=false;
+			row_number=true;
+			urlglobal = host+'backoffice-Data/'+urlnya;
+			param['db_flag'] = "B";
+			frozen[modnya] = [];
+			kolom[modnya] = [	
+				{field:'no_order',title:'<b>No. Invoice</b>',width:130, halign:'center',align:'center'},							
+				{field:'tgl_order',title:'<b>Tgl. Order</b>',width:150, halign:'center',align:'center'},			
+				{field:'zona',title:'<b>Zona</b>',width:80, halign:'center',align:'center'},				
+				{field:"nama_sekolah",title:'<b>Nama Sekolah</b>',width:200, halign:'center',align:'left'},
+				{field:'grand_total',title:'<b>Grand Total</b>',width:150, halign:'center',align:'right',
+					formatter:function(value,rowData,rowIndex){
+						return NumberFormat(value);
+					}
+				},
+				{field:"nama_sales",title:'<b>Sales</b>',width:200, halign:'center',align:'left',hidden:(role == "PIC" ? false : true)},
+			];
+		break;		
+		
 		case "monitoring_buku":
 		case "monitoring_media":
 			judulnya = (modnya=='monitoring_buku' ? "Monitoring Order Buku " : "Monitoring Order Media");
@@ -322,64 +360,6 @@ function genGrid(modnya, divnya, lebarnya, tingginya, par1,db_flag){
 					}
 				},
 				{field:'no_resi',title:'No Resi',width:150, halign:'center',align:'center'}
-				
-			];
-		break;
-		case "trans_buku_sekolah":
-		case "trans_buku_umum":
-			judulnya = (modnya=='trans_buku_sekolah' ? "Daftar Invoice Order Pelanggan Sekolah" : "Daftar Invoice Order Pelanggan Umum");
-			urlnya = modnya;
-			fitnya = true;
-			nowrap=false;
-			row_number=true;
-			urlglobal = host+'backoffice-Data/'+urlnya;
-			frozen[modnya] = [	
-				{field:'id',title:'Lihat Detil',width:80, halign:'center',align:'center',
-					formatter:function(value,rowData,rowIndex){
-						var db_flag='B';
-						return "<a href='javascript:void(0);' class='btn btn-small' onclick='get_detil(\""+modnya+"\",\""+value+"\",\""+db_flag+"\")'><img src='"+host+"__assets/easyui/themes/icons/cost_object.png'></a>";
-					}
-				},
-				{field:'status',title:'Status',width:120, halign:'center',align:'left',
-					formatter:function(value,rowData,rowIndex){
-						if(value=='P'){return 'Proses Pembayaran';}
-						else if(value=='C'){
-							return 'DiCancel';
-						}else return 'Sudah Bayar';
-					},
-					styler:function(value,rowData,rowIndex){
-						if(value=='P'){return 'background:yellow;color:navy;'}
-						else if(value=='C'){
-							return 'background:red;color:#ffffff;';
-						}else {return 'background:green;color:#ffffff;'}
-						
-					}
-				},
-				{field:'no_order',title:'No Order/Invoice',width:130, halign:'center',align:'center'},
-				{field:'tgl_order',title:'Tgl. Order',width:150, halign:'center',align:'center'},
-				{field:'zona',title:'Zona',width:80, halign:'center',align:'center'},
-				
-			];
-			kolom[modnya] = [	
-				{field:(modnya=='trans_buku_sekolah' ? "nama_sekolah" : "nama_lengkap"),title:(modnya=='trans_buku_sekolah' ? 'Nama Sekolah' : "Nama Lengkap"),width:200, halign:'center',align:'left'},
-				{field:'sub_total',title:'Sub. Total',width:150, halign:'center',align:'right',
-					formatter:function(value,rowData,rowIndex){
-						return NumberFormat(value);
-					}
-				},
-				{field:'pajak',title:'Pajak',width:150, halign:'center',align:'right',
-					formatter:function(value,rowData,rowIndex){
-						return NumberFormat(value);
-					}
-				},
-				{field:'grand_total',title:'Grand Total',width:150, halign:'center',align:'right',
-					formatter:function(value,rowData,rowIndex){
-						return NumberFormat(value);
-					}
-				},
-				
-				
-				
 				
 			];
 		break;
@@ -515,7 +495,7 @@ function genGrid(modnya, divnya, lebarnya, tingginya, par1,db_flag){
 			showFooter:footer,
 			singleSelect:singleSelek,
 			url: urlglobal,		
-			nowrap: nowrap_nya,
+			nowrap: nowrap,
 			pageSize:pagesizeboy,
 			pageList:[10,20,30,40,50,75,100,200],
 			queryParams:param,
@@ -550,12 +530,11 @@ function genGrid(modnya, divnya, lebarnya, tingginya, par1,db_flag){
 					var $panel = $(this).datagrid('getPanel');
 					var $info = '<div class="info-empty" style="margin-top:20%;">Data Tidak Tersedia</div>';
 					$($panel).find(".datagrid-view").append($info);
-					//$('#edit').linkbutton({disabled:true});
-					//$('#del').linkbutton({disabled:true});
 				}else{
 					$($panel).find(".datagrid-view").append('');
+					$('.info-empty').remove();
 				}
-			},
+			},			
 		});
 	}
 }
@@ -566,6 +545,7 @@ function genform(type, modulnya, submodulnya, stswindow, tabel){
 	var urldelete = host+'backoffice-simpan/'+submodulnya+'/delete';
 	var id_tambahan = "";
 	var table = submodulnya;
+	
 	/*switch(submodulnya){
 		case "cl_facility_unit":
 			table = "warkom";
@@ -587,7 +567,8 @@ function genform(type, modulnya, submodulnya, stswindow, tabel){
 					windowFormPanel(resp, judulwindow, lebar, tinggi);
 				}else{
 					$('#detil_nya_'+submodulnya).show();
-					$('#detil_nya_'+submodulnya).html(resp).removeClass("loading");
+					$('#detil_nya_'+submodulnya).html(resp);
+					$('#detil_nya_'+submodulnya).removeClass("loading");
 				}
 			});
 		break;
@@ -724,13 +705,17 @@ function kumpulAction(type, p1, p2, p3, p4, p5){
 
 function submit_form(frm,func){
 	var url = jQuery('#'+frm).attr("url");
-    jQuery('#'+frm).form('submit',{
+    $.messager.progress();
+	jQuery('#'+frm).form('submit',{
             url:url,
             onSubmit: function(){
-                  return $(this).form('validate');
+				var isValid = $(this).form('validate');
+				if (!isValid){
+					$.messager.progress('close');	// hide progress bar while the form is invalid
+				}
+				return isValid;	
             },
             success:function(data){
-				//$.unblockUI();
                 if (func == undefined ){
                      if (data == "1"){
                         pesan('Data Sudah Disimpan ','Sukses');
@@ -740,9 +725,9 @@ function submit_form(frm,func){
                 }else{
                     func(data);
                 }
+				$.messager.progress('close');
             },
             error:function(data){
-				//$.unblockUI();
                  if (func == undefined ){
                      pesan(data,'Error');
                 }else{

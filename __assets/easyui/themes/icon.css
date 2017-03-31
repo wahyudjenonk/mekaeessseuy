@@ -1,3 +1,6 @@
+.icon-preview{
+	background:url('icons/magnifier_zoom_in.gif') no-repeat center center;
+}
 .icon-blank{
 	background:url('icons/blank.gif') no-repeat center center;
 }
@@ -66,6 +69,21 @@
 }
 .icon-more{
 	background:url('icons/more.png') no-repeat center center;
+}
+.icon-download{
+	background:url('icons/download.png') no-repeat center center;
+}
+.icon-report{
+	background:url('icons/report.png') no-repeat center center;
+}
+.icon-print2{
+	background:url('icons/printer2.png') no-repeat center center;
+}
+.icon-print3{
+	background:url('icons/printer3.png') no-repeat center center;
+}
+.icon-upload{
+	background:url('icons/upload.ico') no-repeat center center;
 }
 
 

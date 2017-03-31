@@ -1571,7 +1571,8 @@
 	-webkit-transition: color 0.3s;
 }
 .sky-form .button {
-	background-color: #2da5da;
+	font-weight:bold;
+	background-color: #90C42F;
 	opacity: 0.8;
 	transition: opacity 0.2s;
 	-o-transition: opacity 0.2s;

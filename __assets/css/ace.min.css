@@ -1129,7 +1129,27 @@ blockquote,blockquote.pull-right {
     padding-right: 0;
     min-height: 50px;
     position: relative;
-    background: #F1505B;
+    /*background: #1A9AC4;
+	
+background: rgba(255,255,255,1);
+background: -moz-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(88,151,254,1) 93%, rgba(77,144,254,1) 99%, rgba(255,255,255,1) 100%);
+background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255,255,255,1)), color-stop(93%, rgba(88,151,254,1)), color-stop(99%, rgba(77,144,254,1)), color-stop(100%, rgba(255,255,255,1)));
+background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(88,151,254,1) 93%, rgba(77,144,254,1) 99%, rgba(255,255,255,1) 100%);
+background: -o-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(88,151,254,1) 93%, rgba(77,144,254,1) 99%, rgba(255,255,255,1) 100%);
+background: -ms-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(88,151,254,1) 93%, rgba(77,144,254,1) 99%, rgba(255,255,255,1) 100%);
+background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(88,151,254,1) 93%, rgba(77,144,254,1) 99%, rgba(255,255,255,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=1 );
+*/
+
+background: rgba(255,255,255,1);
+background: -moz-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(144,196,47,1) 100%);
+background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255,255,255,1)), color-stop(100%, rgba(144,196,47,1)));
+background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(144,196,47,1) 100%);
+background: -o-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(144,196,47,1) 100%);
+background: -ms-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(144,196,47,1) 100%);
+background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(144,196,47,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#90C42F', GradientType=1 );
+
 }
 
 .navbar .navbar-text,.navbar .navbar-link {
@@ -1203,7 +1223,7 @@ blockquote,blockquote.pull-right {
 }
 
 .ace-nav>li.light-blue {
-    background: #FF616C;
+    background: #90C42F;
 }
 
 .ace-nav>li.light-blue2 {
@@ -4051,7 +4071,7 @@ button.btn:active {
 }
 
 .user-info {
-    max-width: 100px;
+    max-width: auto;
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -7263,7 +7283,7 @@ th .lbl:only-child,td .lbl:only-child {
     box-shadow: none;
     border-radius: 0;
     margin: -1px 0 0 -1px;
-    padding: 8px 3px 6px 9px;
+    padding: 8px 10px 6px 9px;
     border: 1px dotted;
     border-color: #d8d8d8!important;
     vertical-align: middle;
