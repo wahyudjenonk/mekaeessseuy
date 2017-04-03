@@ -1,0 +1,279 @@
+{literal}
+<style type="text/css">
+.fontoke {
+	font-family:helvetica,arial,verdana,sans; font-size:12px;
+}
+
+table.gridtable {
+	font-family: helvetica,arial,verdana,sans;
+	font-size:12px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	font-family: helvetica,arial,verdana,sans;
+	font-size:12px;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	font-family: helvetica,arial,verdana,sans;
+	font-size:12px;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+</style>
+{/literal}
+
+<table class="fontoke" width="100%">
+	<tr>
+		<td style="width: 35%; height: 50px;"><img src='__assets/img/logo_mks.png' width='150px' /></td>
+		<td style="height: 80px; color: #00000; text-align: left;" valign="middle">
+			<div style="font-family:arial; font-weight:bold;">		
+			<h5>
+				<h2>BERITA ACARA SERAH TERIMA</h2>
+				<h2>BUKU KURIKULUM TAHUN 2013</h2>
+			</h5>
+			</div>
+
+		</td>
+	</tr>
+	
+	<tr>
+		<td colspan='3'>
+			<br/>
+			No. {$no_bast}
+		</td>
+	</tr>
+</table>
+<p style='font-family:helvetica,arial,verdana,sans; font-size:12px;'> 
+	Pada hari ini, {$tgl.hari|default:'-'} Tanggal {$tgl.tgl_text|default:'-'} Bulan {$tgl.bulan|default:'-'} Tahun {$tgl.tahun|default:'-'},   
+	Pukul {$time.jam|default:'-'}, Menit {$time.menit|default:'-'}, Detik {$time.detik|default:'Nol'},
+	yang bertanda tangan dibawah ini : 
+</p>
+
+<table width="100%" style='margin-top:10px;margin-bottom:10px;font-family:helvetica,arial,verdana,sans; font-size:12px;'>
+	<tr>
+		<td width='20%' >Nama</td>
+		<td width='5%' >:</td>
+		<td width='75%'>Reza Viryawan</td>
+	</tr>
+	<tr>
+		<td>Jabatan</td>
+		<td>:</td>
+		<td>Direktur Utama</td>
+	</tr>
+	<tr>
+		<td>Perusahaan</td>
+		<td>:</td>
+		<td>PT. Mulia Kencana Semesta</td>
+	</tr>
+	<tr>
+		<td>Alamat</td>
+		<td>:</td>
+		<td>Jl. A. H. Nasution No. 73 Cipadung Bandung.</td>
+	</tr>
+	<tr>
+		<td colspan='3'>
+			<br />
+			Selanjutnya disebut sebagai PIHAK PERTAMA
+		</td>
+	</tr>
+</table>
+
+<table width="100%" style='margin-bottom:10px;font-family:helvetica,arial,verdana,sans; font-size:12px;'>
+	{if $datacust.jenis_pembeli eq 'SEKOLAH'}
+	<tr>
+		<td width='20%'>Nama</td>
+		<td width='5%'>:</td>
+		<td width='75%'>{$datacust.nama_kepala_sekolah|default:''}</td>
+	</tr>
+	<tr>
+		<td>Jabatan</td>
+		<td>:</td>
+		<td>Kepala Sekolah</td>
+	</tr>
+	<tr>
+		<td>NIP</td>
+		<td>:</td>
+		<td>{$datacust.nip|default:''}</td>
+	</tr>
+	<tr>
+		<td>Nama Sekolah</td>
+		<td>:</td>
+		<td>{$datacust.nama_sekolah|default:''}</td>
+	</tr>
+	<tr>
+		<td>NPSN</td>
+		<td>:</td>
+		<td>{$datacust.npsn|default:''}</td>
+	</tr>
+	<tr>
+		<td>Alamat</td>
+		<td>:</td>
+		<td>{$datacust.alamat_pengiriman|default:''}</td>
+	</tr>
+	<tr>
+		<td>Telepon Sekolah</td>
+		<td>:</td>
+		<td>{$datacust.no_telp_sekolah|default:''}</td>
+	</tr>
+	<tr>
+		<td>Handphone</td>
+		<td>:</td>
+		<td>{$datacust.no_hp_kepsek|default:''}</td>
+	</tr>
+	<tr>
+		<td>Email</td>
+		<td>:</td>
+		<td>{$datacust.email|default:''}</td>
+	</tr>
+	{elseif $datacust.jenis_pembeli eq 'UMUM'}
+	<tr>
+		<td width='20%'>Nama</td>
+		<td width='5%'>:</td>
+		<td width='75%'>{$datacust.nama_lengkap|default:'-'}</td>
+	</tr>
+	<tr>
+		<td>Alamat</td>
+		<td>:</td>
+		<td>{$datacust.alamat_pengiriman|default:'-'}</td>
+	</tr>
+	<tr>
+		<td>No. Telp.</td>
+		<td>:</td>
+		<td>{$datacust.no_telp_customer|default:'-'}</td>
+	</tr>
+	<tr>
+		<td>Handphone</td>
+		<td>:</td>
+		<td>{$datacust.no_hp_customer|default:'-'}</td>
+	</tr>
+	<tr>
+		<td>Email</td>
+		<td>:</td>
+		<td>{$datacust.email|default:'-'}</td>
+	</tr>
+	{/if}
+	<tr>
+		<td colspan='3'>
+			<br />
+			Selanjutnya disebut sebagai PIHAK KEDUA
+		</td>
+	</tr>	
+</table>
+
+<p align='justify' style='font-family:helvetica,arial,verdana,sans; font-size:12px;'>
+	Selanjutnya berdasarkan Pemesanan Online Buku Kurikulum Tahun 2013 
+	PIHAK PERTAMA telah menyerahkan Buku Kurikulum Tahun 2013, dan PIHAK KEDUA telah menerima buku yang dimaksud sebagai berikut :
+</p>
+
+<table width="100%" class="gridtable" style='margin-bottom:10px;'>
+	<thead>
+		<tr style="border:1px solid black;">
+		  <th style="border-bottom:1px solid black;" width="5%" rowspan="2">No.</th>
+		  <th style="border-bottom:1px solid black;" width='30%' rowspan="2">Judul Buku</th>
+		  <th style="border-bottom:1px solid black;" width='10%' rowspan="2">Kelas</th>
+		  <th style="border-bottom:1px solid black;" width='10%' rowspan="2">Jenis(S/G)</th>
+		  <th style="border-bottom:1px solid black;" width='10%' rowspan="2">Oplah Dipesan</th>
+		  <th style="border-bottom:1px solid black;" width="20%" colspan="3">Hasil Pemeriksaan</th>
+		  <th style="border-bottom:1px solid black;" width='20%' rowspan="2">Harga</th>
+		  <th style="border-bottom:1px solid black;" width='20%' rowspan="2">Total</th>
+		</tr>
+		<tr style="border:1px solid black;">
+		  <th style="border-bottom:1px solid black;" width="10%">Baik</th>
+		  <th style="border-bottom:1px solid black;" width="10%">Rusak</th>
+		  <th style="border-bottom:1px solid black;" width="10%">Kurang</th>
+		</tr>
+	</thead>
+	{if $datadetailpesanan}
+		{assign var=ind value=1}
+		{foreach from=$datadetailpesanan item=rws}
+			<tr>
+				<td style='border:1px solid #000;padding:5px;'>{$ind}</td>
+				<td style='border:1px solid #000;padding:5px;'>{$rws.judul_buku}</td>
+				<td style='border:1px solid #000;padding:5px;' align='center'>{$rws.kelas}</td>
+				<td style='border:1px solid #000;padding:5px;' align='center'>
+					{if $rws.nama_group eq "S" }
+						Siswa
+					{elseif $rws.nama_group eq "G" }
+						Guru
+					{/if}
+				</td>
+				<td style='border:1px solid #000;padding:5px;' align='right'>{$rws.qty}</td>
+				<td style='border:1px solid #000;padding:5px;'>&nbsp;</td>
+				<td style='border:1px solid #000;padding:5px;'>&nbsp;</td>
+				<td style='border:1px solid #000;padding:5px;'>&nbsp;</td>
+				<td style='border:1px solid #000;padding:5px;' align='right'>{$rws.harga}</td>
+				<td style='border:1px solid #000;padding:5px;' align='right'>{$rws.subtotal}</td>
+			</tr>
+			{assign var=ind value=$ind+1}
+		{/foreach}
+		<tr style='background:#EFEFEF;'>
+			<td style='border:1px solid #000;padding:5px;font-weight:bold;' >&nbsp;</td>
+			<td style='border:1px solid #000;padding:5px;font-weight:bold;' colspan='3' align='center'>Total Oplah</td>
+			<td style='border:1px solid #000;padding:5px;font-weight:bold;' align='center'>{$totqty|default:'0'}</td>
+			<td style='border:1px solid #000;padding:5px;font-weight:bold;' colspan='4' align='center'>Total Harga</td>
+			<td style='border:1px solid #000;padding:5px;font-weight:bold;' align='center'>Rp. {$tottotal|default:'0'}</td>
+		</tr>
+	{/if}
+</table>
+
+<p align='justify' style='font-family:helvetica,arial,verdana,sans; font-size:12px;'>
+	Demikian Berita Acara Serah Terima ini dibuat dengan sebenar-benarnya, dan untuk dapat dipergunakan dengan semestinya.
+</p>
+<table width="100%" style='margin-top:10px;margin-bottom:10px;font-family:helvetica,arial,verdana,sans; font-size:12px;'>
+	<tr>
+		<td width='50%' align='center'>
+			<table width="100%">
+				<tr>
+					<td align='center'>PIHAK KEDUA</td>
+				</tr>
+				<tr>
+					<td align='center'>
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						{if $datacust.jenis_pembeli eq 'SEKOLAH'}
+							( {$datacust.nama_kepala_sekolah|default:'-'} )
+						{elseif $datacust.jenis_pembeli eq 'UMUM'}
+							( {$datacust.nama_lengkap|default:'-'} )
+						{/if}
+ 					</td>
+				</tr>
+			</table>
+		</td>
+		<td width='50%' align='center'>
+			<table width="100%">
+				<tr>
+					<td align='center'>PIHAK PERTAMA</td>
+				</tr>
+				<tr>
+					<td align='center'>
+							<img src='__assets/img/stempel-tdtgn-mks.png' width='130px' height="90px" />
+						<br/>
+						( Reza Viryawan )
+ 					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<p align='justify' style='font-family:helvetica,arial,verdana,sans; font-size:12px;'>
+	<i>
+	*BAST yang sudah diisi dan ditandatangani juga distempel <b>wajib</b> diupload kembali ke dalam webstore <a href="">bukusekolah.mks-store.id</a> 
+	sebagai bukti untuk pelaporan kepada Kemdikbud tentang penggunaan dana BOS dan rencana penggunaan dana BOS yang akan datang.
+	</i>
+</p>

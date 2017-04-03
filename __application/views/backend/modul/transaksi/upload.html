@@ -1,0 +1,121 @@
+<div class="page-header position-relative">
+	<h1>
+		Form Upload File BAST & Tanda Terima - {$no_order}
+	</h1>
+</div>
+<div class="row-fluid">
+	<div class="span12">
+		{if $cek_upl eq 'true'}
+		<form class="form-horizontal" id='frmkonfirm' name='frmkonfirm' url="{$host}submit-uploadfile" enctype="multipart/form-data" method="post">
+			<input type="hidden" name="inv" value="{$data_order.no_order}">
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">No. Order</label>
+				<div class="controls">
+					<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$data_order.no_order}</font></div>
+				</div>
+			</div>			
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">File BAST</label>
+				<div class="controls">
+					<input class="validasi" type="file" id="fl_bast" name="fl_bast" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Tanda Terima</label>
+				<div class="controls">
+					<input class="validasi" type="file" id="fl_tndterima" name="fl_tndterima" />
+				</div>
+			</div>
+		</form>
+		<div class="form-actions">
+			<a class="btn btn-info" href='javascript:void(0);' id='simpanUpload'>
+				Simpan
+			</a>
+			&nbsp; &nbsp; &nbsp;
+			<a class="btn btn-danger" href='javascript:void(0);' id='kembaliUpload'>
+				Kembali
+			</a>
+			&nbsp; &nbsp; &nbsp;
+		</div>
+		{elseif $cek_upl eq 'false'}
+			<div class="form-horizontal">
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">No. Order</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$data_order.no_order}</font></div>
+					</div>
+				</div>							
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">File BAST</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1">
+							<a href="http://localhost:81/public_codeigniter/mks/__repository/bast_tandaterima/{$dataupload.file_bast|default:''}" target="_blank">Lihat File</a>
+						</div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">File Tanda Terima</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1">
+							<a href="http://localhost:81/public_codeigniter/mks/__repository/bast_tandaterima/{$dataupload.file_tanda_terima|default:''}" target="_blank">Lihat File</a>
+						</div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">Tanggal Upload</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$dataupload.tgl_upload|default:''}</font></div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="form-actions">
+				<a class="btn btn-danger" href='javascript:void(0);' id='kembaliUpload'>
+					Kembali
+				</a>
+				&nbsp; &nbsp; &nbsp;
+			</div>
+		{/if}
+	</div>
+</div>
+
+<script>
+	$(".validasi").validatebox({ required:true }); 		
+	
+	$('#simpanUpload').on('click', function(){
+		validasi = $('#frmkonfirm').form('validate');
+		submit_form('frmkonfirm',function(r){
+			if(r == 1){
+				$('#modalencuk').html('<h3>Sukses Konfirmasi Pembayaran. <br /> Harap Tunggu Proses Verifikasi Pembayaran Oleh Tim MKS-Store.</h3>');
+				$('#pesanModal').modal('show');
+				$('.info-empty').remove();
+			}else if(r == 2){
+				$('#modalencuk').html('<h3>Data Order Tidak Valid!</h3>');
+				$('#pesanModal').modal('show');
+			}else{
+				$('#modalencuk').html(r);				
+				$('#pesanModal').modal('show');
+			}
+			
+			$('#grid_nya_penjualan').show();
+			$('#detil_nya_penjualan').empty().hide();
+			$('#grid_penjualan').datagrid('reload');
+		});
+		return false;
+	});
+	
+	$('#kembaliUpload').on('click', function(){
+		$('#grid_nya_penjualan').show();
+		$('#detil_nya_penjualan').empty().hide();
+		//$('#grid_penjualan').datagrid('reload');
+	});
+	
+	
+	/*
+	$('#cetak_kartu').on('click', function(){
+		var post = {};
+		post['email'] = "{$data.email_address}";
+		openWindowWithPost(host+'cetak-kartu', post);
+	});
+	*/
+</script>

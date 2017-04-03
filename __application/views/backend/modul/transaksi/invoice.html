@@ -1,0 +1,167 @@
+ <div class="span12">
+	<div class="row-fluid">
+		<fieldset>
+		<div class="span6">
+			<table width="100%" cellpadding="1" cellspacing="1">
+				<tr>
+					<td style="width:10%">&nbsp;</td>
+					<td style="width:40%">No. Invoice</td>
+					<td width="2%">:</td>
+					<td>{$data.header.no_order|default:'-'}</td>
+				</tr>
+				<tr>
+					<td style="width:10%">&nbsp;</td>
+					<td style="width:40%">Tanggal Order</td>
+					<td width="2%">:</td>
+					<td>{$data.header.tanggal_order|default:'-'}</td>
+				</tr>
+				<tr>
+					<td style="width:10%">&nbsp;</td>
+					<td style="width:40%">{if $data.header.jenis_pembeli eq 'SEKOLAH'} Nama Sekolah {else} Nama Lengkap{/if}</td>
+					<td width="2%">:</td>
+					<td>{if $data.header.jenis_pembeli eq 'SEKOLAH'}{$data.header.nama_sekolah|default:'-'}{else}{$data.header.nama_lengkap|default:'-'}{/if}</td>
+				</tr>
+				
+			</table>
+		</div>
+		<div class="span6">
+			<table width="100%">
+				<tr>
+					<td style="width:10%">&nbsp;</td>
+					<td style="width:40%">Zona Pengiriman</td>
+					<td width="2%">:</td>
+					<td>{$data.header.zona|default:'-'}</td>
+				</tr>
+				<tr>
+					<td style="width:10%">&nbsp;</td>
+					<td style="width:40%">Grand Total</td>
+					<td width="2%">:</td>
+					<td>Rp. {$data.header.grand_total|number_format:0:',':'.'|default:'-'}</td>
+				</tr>
+			</table>
+		</div>
+		</fieldset>
+	</div>
+	<div class="row-fluid">
+		<table class="table table-hover">
+			<thead>
+			<tr>
+				
+				<th style="text-align:left;">No.</th>
+				<th>Judul Buku</th>
+				<th style="text-align:right;">Harga (Sesuai Zona {$data.header.zona})</th>
+				<th style="text-align:right;">Jumlah/Qty</th>
+				<th style="text-align:right;">Total</th>
+			</tr>
+			</thead>
+			<tbody>
+			{assign var=tot_qty value=0}
+			{assign var=tot_harga value=0}
+			{assign var=tot_pajak value=0}
+			{assign var=grand_tot value=0}
+			{foreach from=$data.detil item=i name=x}
+			{if $i.flag neq 'C'}
+			{assign var=tot_qty value=$tot_qty+$i.qty}
+			{assign var=tot_harga value=$tot_harga+$i.total}
+			{/if}
+			<tr style="{if $i.flag eq 'C'}background:red;color:#FFFFFF{/if}">
+				
+				<td >{$smarty.foreach.x.iteration}</td>
+				<td>{$i.judul_buku|default:'-'}</td>
+				<td style="text-align:right;">Rp. {$i.harga|number_format:0:',':'.'|default:'-'}</th>
+				<td style="text-align:right;">{$i.qty|number_format:0:',':'.'|default:'-'}</td>
+				<td style="text-align:right;">Rp.{$i.total|number_format:0:',':'.'|default:'-'}</td>
+								
+			</tr>
+			{/foreach}
+			</tbody>
+			
+			<tr style="font-weight:bold;">
+				<td colspan="3" align="center">GRAND TOTAL</td>
+				<td style="text-align:right;">{$tot_qty|default:'-'}</td>
+				<td style="text-align:right;">Rp.{$tot_harga|number_format:0:',':'.'|default:'-'}</td>
+			</tr>
+		</table>
+		<hr/>
+	</div>
+	
+	{if $datatracking}	
+	<div class="row-fluid">
+			<div class="span12">
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<td style="text-align:center;font-weight:bold;" width="20%">Verifikasi Stok</td>
+								<td style="text-align:center;font-weight:bold;" width="20%">Pembayaran</td>
+								<td style="text-align:center;font-weight:bold;" width="20%">Produksi</td>
+								<td style="text-align:center;font-weight:bold;" width="20%">Packing</td>
+								<td style="text-align:center;font-weight:bold;" width="20%">Pengiriman</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td style="text-align:center;" >{$datatracking.status_verifikasi_stok|default:"-"}</td>
+								<td style="text-align:center;" >{$datatracking.status_konfirmasi_pembayaran|default:"-"}</td>
+								<td style="text-align:center;" >{$datatracking.status_produksi|default:"-"}</td>
+								<td style="text-align:center;" >{$datatracking.status_packing|default:"-"}</td>
+								<td style="text-align:center;" >{$datatracking.status_kirim|default:"-"}</td>
+							</tr>
+							{if $datatracking.no_resi|default:'' neq null}
+							<tr style="font-weight:bold;">
+								<td style="text-align:center;"  colspan="2">No. Resi Pengiriman</td>
+								<td colspan="3">{$datatracking.no_resi|default:''}</td>
+							</tr>
+							{/if}
+						</tbody>
+					</table>
+				</div>
+			</div>
+	</div>
+	{/if}	
+	
+	<div class="row-fluid" style="margin-top:15px !important;">	
+		<div class="pull-right">
+			{if $auth.role eq "SALES"}
+			<a href="{$host}generate-pdf/bast/{$data.header.no_order|default:''}" target="_blank" style='margin-top:-10px' id='search_adv' class="l-btn l-btn-small l-btn-plain" group="" >
+				<span class="l-btn-left l-btn-icon-left">
+					<span class="l-btn-text">Cetak BAST</span><span class="l-btn-icon icon-print">&nbsp;</span>
+				</span>
+			</a>	
+			<a href="{$host}generate-pdf/kwitansi/{$data.header.no_order|default:''}" target="_blank" style='margin-top:-10px' id='search_adv' class="l-btn l-btn-small l-btn-plain" group="" >
+				<span class="l-btn-left l-btn-icon-left">
+					<span class="l-btn-text">Cetak Kwitansi</span><span class="l-btn-icon icon-print">&nbsp;</span>
+				</span>
+			</a>	
+			<a href="{$host}generate-pdf/tandaterima/{$data.header.no_order|default:''}" target="_blank" style='margin-top:-10px' id='search_adv' class="l-btn l-btn-small l-btn-plain" group="" onClick="advancedSearch('advanced_search', 'tbl_upload_file_advanced_search', '{$acak}');">
+				<span class="l-btn-left l-btn-icon-left">
+					<span class="l-btn-text">Cetak Tanda Terima</span><span class="l-btn-icon icon-print2">&nbsp;</span>
+				</span>
+			</a>	
+			<a href="{$host}generate-pdf/suratpesanan/{$data.header.no_order|default:''}" target="_blank" href="javascript:void(0)" style='margin-top:-10px' id='search_adv' class="l-btn l-btn-small l-btn-plain" group="" onClick="advancedSearch('advanced_search', 'tbl_upload_file_advanced_search', '{$acak}');">
+				<span class="l-btn-left l-btn-icon-left">
+					<span class="l-btn-text">Cetak Surat Pesanan</span><span class="l-btn-icon icon-print3">&nbsp;</span>
+				</span>
+			</a>	
+			{/if}
+			<a href="javascript:void(0);" style='margin-top:-10px' id='kembalinya' class="l-btn l-btn-small l-btn-plain" group="" >
+				<span class="l-btn-left l-btn-icon-left">
+					<span class="l-btn-text">Kembali</span><span class="l-btn-icon icon-undo">&nbsp;</span>
+				</span>
+			</a>	
+			
+			<br/>
+			<br/>
+		</div>
+	</div>
+	
+</div>
+
+
+<script>
+	$("#kembalinya").on("click", function(){
+		$('#grid_nya_penjualan').show();
+		$('#detil_nya_penjualan').hide();
+		$('#detil_nya_penjualan').html("");
+	});
+</script>

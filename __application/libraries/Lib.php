@@ -127,6 +127,11 @@ class Lib {
 				$html = $ci->nsmarty->fetch('backend/email-password.html');
 				$subject = "EMAIL REGISTRASI TOOLS MARKETING ALDEAZ";
 			break;
+			case "email_konfirmasi":	
+				$ci->nsmarty->assign('no_order', $p1);
+				$subject = "EMAIL KONFIRMASI PEMBAYARAN ".$p1;
+				$html = $ci->nsmarty->fetch('backend/modul/transaksi/email_konfirmasi.html');
+			break;			
 		}
 		
 		
@@ -232,6 +237,17 @@ class Lib {
 		return $data;
 	}
 	//End Class Konversi Tanggal
+	
+	//Start Class Konversi Jam
+	function konversi_jam($time){
+		$data = array();
+		$times = explode(":", $time);
+		$data["jam"] = ucwords(number_to_words((int)$times[0]));
+		$data["menit"] = ucwords(number_to_words((int)$times[1]));
+		$data["detik"] = ucwords(number_to_words((int)$times[2]));
+		return $data;
+	}
+	//End Class Konversi Jam	
 	
 	//Class Fillcombo
 	function fillcombo($type="", $balikan="", $p1="", $p2="", $p3=""){

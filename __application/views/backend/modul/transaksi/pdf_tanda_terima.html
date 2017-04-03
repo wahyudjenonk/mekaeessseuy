@@ -1,0 +1,225 @@
+{literal}
+<style type="text/css">
+table.gridtable {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	
+}
+.cancel{
+	color:#FFFFFF;
+	background-color: red;
+}
+</style>
+{/literal}
+
+<table width="100%" style='font-family:helvetica,arial,verdana,sans; font-size:12px;'>
+	<tr>
+		<td style="width: 35%; height: 50px;"><img src='__assets/img/logo_mks.png' width='200px' /></td>
+		<td style="width: 30%; height: 80px; color: #00000; text-align: center; " valign="middle">
+			<div style="font-family:arial; font-weight:bold;">		
+				<h1>Tanda Terima</h1>
+				<table width='100%'>
+				<tr>
+					<td width='20%'>No</td>
+					<td width='5%'>:</td>
+					<td width='75%'>{$inv}</td>
+				</tr>
+			</table>
+			</div>
+		</td>
+		<td style="width: 35%; height: 80px;" align='right'>
+			<!--img src='__assets/images/qr.png' width='60px' height='60px' /-->
+		</td>
+	</tr>	
+	<tr>
+		<td colspan='3'><hr /></td>
+	</tr>
+</table>
+<p style='font-family:helvetica,arial,verdana,sans; font-size:14px; font-weight:bold;'> 
+	DATA SEKOLAH PENERIMA
+</p>
+
+<table width="100%" style='font-family:helvetica,arial,verdana,sans; font-size:12px;'>
+	<tr>
+		<td width='20%'>NPSN</td>
+		<td width='5%'>:</td>
+		<td width='75%'>{$data_invoice.npsn}</td>
+	</tr>
+	<tr>
+		<td>Zona Pengiriman</td>
+		<td>:</td>
+		<td>{$data_invoice.zona}</td>
+	</tr>
+	<tr>
+		<td>Provinsi</td>
+		<td>:</td>
+		<td>{$data_invoice.provinsi}</td>
+	</tr>
+	<tr>
+		<td>Kabupaten</td>
+		<td>:</td>
+		<td>{$data_invoice.kab_kota}</td>
+	</tr>
+	<tr>
+		<td>Nama Sekolah</td>
+		<td>:</td>
+		<td>{$data_invoice.nama_sekolah}</td>
+	</tr>
+	<tr>
+		<td>Alamat</td>
+		<td>:</td>
+		<td>{$data_invoice.alamat_pengiriman}</td>
+	</tr>
+	<tr>
+		<td>Nama Penanggung Jawab</td>
+		<td>:</td>
+		<td>{$data_invoice.nama_kepala_sekolah}</td>
+	</tr>
+	<tr>
+		<td>No. Handphone</td>
+		<td>:</td>
+		<td>{$data_invoice.no_hp_kepsek}</td>
+	</tr>
+	<tr>
+		<td>Email</td>
+		<td>:</td>
+		<td>{$data_invoice.email}</td>
+	</tr>
+</table>
+
+<p style='font-family:helvetica,arial,verdana,sans; font-size:14px; font-weight:bold;'> 
+	PENGIRIM
+</p>
+<table width="100%" style='font-family:helvetica,arial,verdana,sans; font-size:12px;'>
+	<tr>
+		<td width='20%'>Nama</td>
+		<td width='5%'>:</td>
+		<td width='75%'>
+			PT. Mulia Kencana Semesta
+		</td>
+	</tr>
+	<tr>
+		<td>Alamat</td>
+		<td>:</td>
+		<td>Jl. A. H. Nasution No. 73 Cipadung Bandung, Provinsi Jawa Barat </td>
+	</tr>
+	<tr>
+		<td>No. Telp</td>
+		<td>:</td>
+		<td> 022 780 2221</td>
+	</tr>
+	<tr>
+		<td>Email</td>
+		<td>:</td>
+		<td> contact@mks-store.id </td>
+	</tr>
+	<tr>
+		<td>Website</td>
+		<td>:</td>
+		<td> www.mks-store.id</td>
+	</tr>
+</table>
+<br/>
+<table width="100%" class="gridtable" style='font-family:helvetica,arial,verdana,sans; font-size:8px;'>
+	<thead>
+		<tr style='background:#FAF8FD'>
+			<td colspan='7' align='center' style='font-weight:bold;text-align:center'>
+				JUMLAH PESANAN BUKU K13 SEMESTER 2
+			</td>
+		</tr>
+		<tr style='background:#FAF8FD'>
+			<td style='font-weight:bold;text-align:center'>No</td>
+			<td style='font-weight:bold;text-align:center'>Kelas</td>
+			<td style='font-weight:bold;text-align:center'>Siswa/Guru</td>
+			<td style='font-weight:bold;text-align:center'>Judul Buku</td>
+			<td style='font-weight:bold;text-align:center'>Harga Rp.</td>
+			<td style='font-weight:bold;text-align:center'>Jumlah</td>
+			<td style='font-weight:bold;text-align:center'>Total Harga</td>
+		</tr>
+	</thead>
+	<tbody>
+		{assign var=ind value=1}
+		{foreach from=$datadetailpesanan item=rows}
+			<tr>
+				<td>{$ind}</td>
+				<td>{$rows.kelas}</td>
+				<td>{$rows.nama_group}</td>
+				<td>{$rows.judul_buku}</td>
+				<td>{$rows.harga}</td>
+				<td>{$rows.qty}</td>
+				<td>{$rows.subtotal}</td>
+			</tr>
+			{assign var=ind value=$ind+1}
+		{/foreach}
+	</tbody>
+</table>
+<br/>
+
+<p style='font-family:helvetica,arial,verdana,sans; font-size:12px; font-weight:bold;'> 
+	Bandung, {$smarty.now|date_format:"%d %b %Y"|default:'-'}
+</p>
+<br/>
+
+<table width="100%" style='font-family:helvetica,arial,verdana,sans; font-size:12px;'>
+	<tr>
+		<td style="width: 35%; height: 80px;" align='center'>
+			Diterima
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			..................
+		</td>
+		<td style="width: 30%; height: 80px; color: #00000; text-align: center; " align='center'>
+			Ekspedisi
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			..................
+		</td>
+		<td style="width: 35%; height: 80px;" align='center'>
+			Administrasi
+			<br/>
+			<img src='__assets/img/stempel-mks.png' width='130px' height="90px" />
+			<br/>
+			
+			(Januar Kadarisman)
+		</td>
+	</tr>	
+</table>
+
+<p style='font-family:helvetica,arial,verdana,sans; font-size:12px; font-weight:bold;'> 
+	<i>Catatan</i>
+	<ol style='font-family:helvetica,arial,verdana,sans; font-size:10px;'>
+		<li>Paling lambat dalam 3 hari kerja, jumlah tersebut diatas wajib dibayar supaya masuk dalam laporan kegiatan dapodik</li>
+		<li>Pembayaran di transfer ke Rekening <b>BRI KCB Ujung Berung, Nomor 035401001654308 an. PT. Mulia Kencana Semesta</b></li>
+		<li>Tanda terima yang sudah di tanda tangani, di stempel dan bukti transfer agar di upload untuk mendapatkan BAST dan kwitansi</li>
+		 
+	</ol>
+</p>
+
+

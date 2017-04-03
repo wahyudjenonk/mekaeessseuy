@@ -1,0 +1,191 @@
+{literal}
+<style type="text/css">
+.fontoke {
+	font-family:helvetica,arial,verdana,sans; font-size:14px;
+}
+table.gridtable {
+	font-family: verdana,arial,sans-serif;
+	font-size:12px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	font-family: verdana,arial,sans-serif;
+	font-size:12px;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	font-family: verdana,arial,sans-serif;
+	font-size:12px;
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+</style>
+{/literal}
+
+<div style="width:100%;border:1px solid #888888;">
+	<table width="100%" class="fontoke">
+		<tr>
+			<td colspan="2" style="text-align:center;padding:10px;">
+				<img src='__assets/img/logo_mks.png' width='200px' />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="text-align:center;padding:10px;">
+				Jl. A. H. Nasution No. 73, Cipadung, Bandung, 40614
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:center;padding:5px;">
+				Telepon : (022) 7802221 <br>
+				Faximile : (022) 7802621
+			</td>
+			<td style="text-align:center;padding:5px;">
+				Website : bukusekolah.mks-store.id <br>
+				E-mail : contact@mks-store.id
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="fontoke" style="width:100%;border:1px solid #888888;padding:10px;">
+	<br/>
+	<table width="100%" class="fontoke">
+		<tr>
+			<td style="text-align:center;padding:5px;">
+				<font style="text-align:center;font-weight:bold;">KWITANSI</font>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:left;padding:5px;">
+				No. {$no_kwitansi}	
+				<br/>
+				<br/>
+				<br/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table width="100%" class="fontoke">
+					<tr>
+						<td valign="top" width="30%">Sudah Terima Dari</td>
+						<td valign="top" width="10%" align="center">:</td>
+						<td valign="top" width="60%">
+							{if $datacust.jenis_pembeli eq "SEKOLAH"}
+								Sekolah {$datacust.nama_sekolah}
+							{/if}
+						</td>
+					</tr>
+					<tr>
+						<td valign="top">Uang Sebesar</td>
+						<td valign="top" align="center">:</td>
+						<td valign="top" style="border:1px solid #888888;padding:10px;">
+							<i>{$jumlah} Rupiah</i>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3"><br/></td>
+					</tr>
+					<tr>
+						<td valign="top">Untuk pembayaran</td>
+						<td valign="top" align="center">:</td>
+						<td valign="top">
+							<i>Pemesanan Buku Kurikulum 2013 dengan rincian seperti dalam BAST terlampir.</i>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align:left;padding:5px;">
+				 Rp. {$grandtotal},-
+			</td>
+		</tr>
+	</table>
+	<br/>
+	<br/>
+	<table width="100%" class="fontoke">
+		<tr>
+			<td style="text-align:left;padding:5px;">
+				Bandung, {$tglgenerate|date_format:"%d %b %Y"|default:'-'}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<br/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table width="100%" class="fontoke">
+					<tr>
+						<td valign="top" width="230px" align="left">
+							Setuju dibayar, <br/>
+							Kepala Sekolah,
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							_______________________ <br/>
+							NIP ___________________
+						</td>
+						<td valign="top" width="33%" align="center">
+							Lunas dibayar, <br/>
+							Bendahara,
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							_______________________ <br/>
+							NIP ___________________
+						</td>
+						<td valign="top" width="33%" align="right">
+							MKS Online <br/>
+							Book Store
+							<br/>
+							&nbsp;&nbsp;&nbsp;
+							<img src='__assets/img/stempel-tdtgn-mks.png' width='120px' height="100px" />
+							<br/>
+							<u>Reza Viryawan</u> <br/>
+							Direktur Utama
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<i>
+					**Note : Pembayaran ini dianggap sah apabila disertai dengan bukti transfer dari bank 
+					atau setelah proses kliring dari bank yang bersangkutan.
+				</i>
+			</td>
+		</tr>
+	</table>
+</div>

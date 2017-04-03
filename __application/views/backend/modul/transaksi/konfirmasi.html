@@ -1,0 +1,200 @@
+<div class="page-header position-relative">
+	<h1>
+		Form Konfirmasi Pembayaran - {$no_order}
+	</h1>
+</div>
+<div class="row-fluid">
+	<div class="span12">
+		{if $cek_konf eq 'true'}
+		<form class="form-horizontal" id='frmkonfirm' name='frmkonfirm' url="{$host}submit-konfirmasi" enctype="multipart/form-data" method="post">
+			<input type="hidden" name="inv" value="{$data_order.no_order}">
+			<input type="hidden" name="id" value="{$data.id|default:''}">
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">No. Order</label>
+				<div class="controls">
+					<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$data_order.no_order}</font></div>
+				</div>
+			</div>			
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Jumlah Tagihan</label>
+				<div class="controls">
+					<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$data_order.grand_total}</font></div>
+				</div>
+			</div>			
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Nama Bank Pengirim</label>
+				<div class="controls">
+					<select class="span4 form-control validasi" required id="bank_pengirim" name="bank_pengirim" >	
+						<option value=""> -- Pilih -- </option>
+						<option value="BRI">BANK BRI</option>
+						<option value="MANDIRI">BANK MANDIRI</option>
+						<option value="BNI">BANK BNI</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Atas Nama Bank Pengirim</label>
+				<div class="controls">
+					<input class="span6 form-control validasi" required id="atas_nama" name="atas_nama" type="text">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Nama Bank Tujuan</label>
+				<div class="controls">
+					<select class="span4 form-control validasi" required id="bank_tujuan" name="bank_tujuan" >	
+						<option value=""> -- Pilih -- </option>
+						<option value="BRI">BANK BRI</option>
+					</select>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Jumlah Transfer</label>
+				<div class="controls">
+					<input class="span4 form-control validasi" required id="jml_trf" name="jml_trf" type="text">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Tanggal Transfer</label>
+				<div class="controls">
+					<input class="form-control validasi" required id="tgl_trf" name="tgl_trf" type="text">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="form-field-1">Bukti Bayar</label>
+				<div class="controls">
+					<input class="validasi" type="file" id="bkt_byr" name="bkt_byr" />
+				</div>
+			</div>
+		</form>
+		<div class="form-actions">
+			<a class="btn btn-info" href='javascript:void(0);' id='simpanKonfirm'>
+				Simpan
+			</a>
+			&nbsp; &nbsp; &nbsp;
+			<a class="btn btn-danger" href='javascript:void(0);' id='kembaliKonfirm'>
+				Kembali
+			</a>
+			&nbsp; &nbsp; &nbsp;
+		</div>
+		{elseif $cek_konf eq 'false'}
+			<div class="form-horizontal">
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">No. Order</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$data_order.no_order}</font></div>
+					</div>
+				</div>			
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">Jumlah Tagihan</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$data_order.grand_total}</font></div>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">Tanggal Konfirmasi</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$datakonfirmasi.tanggal_konfirmasi|default:''}</font></div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">Nama Bank Pengirim</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$datakonfirmasi.nama_bank_pengirim|default:''}</font></div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">Atas Nama</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$datakonfirmasi.atas_nama_pengirim|default:''}</font></div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">Bank Tujuan</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$datakonfirmasi.nama_bank_penerima|default:''}</font></div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">Jumlah Transfer</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1"><font color="red">Rp. {$datakonfirmasi.total_pembayaran|number_format:0:',':'.'|default:''}</font></div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">Tanggal Transfer</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$datakonfirmasi.tgl_transfer|default:''}</font></div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="form-field-1">File Bukti Bayar</label>
+					<div class="controls">
+						<div id="form-field-1" class="span8" id="form-field-1">
+							<a href="http://localhost:81/public_codeigniter/mks/__repository/konfirmasi/{$datakonfirmasi.file_bukti_bayar|default:''}" target="_blank">Lihat File</a>
+						</div>
+					</div>
+				</div>				
+				
+			</div>
+			<div class="form-actions">
+				<a class="btn btn-danger" href='javascript:void(0);' id='kembaliKonfirm'>
+					Kembali
+				</a>
+				&nbsp; &nbsp; &nbsp;
+			</div>
+		{/if}
+	</div>
+</div>
+
+<script>
+	$(".validasi").validatebox({ required:true }); 		
+	
+	$("#jml_trf").maskMoney({
+		precision:0,
+		thousands:'.'
+	});	
+	
+	$('#tgl_trf').datepicker({
+		format: 'yyyy-mm-dd',
+	}).prev().on(ace.click_event, function(){
+		$(this).next().focus();
+	});	
+	
+	$('#simpanKonfirm').on('click', function(){
+		validasi = $('#frmkonfirm').form('validate');
+		submit_form('frmkonfirm',function(r){
+			if(r == 1){
+				$('#modalencuk').html('<h3>Sukses Konfirmasi Pembayaran. <br /> Harap Tunggu Proses Verifikasi Pembayaran Oleh Tim MKS-Store.</h3>');
+				$('#pesanModal').modal('show');
+				$('.info-empty').remove();
+			}else if(r == 2){
+				$('#modalencuk').html('<h3>Data Order Tidak Valid!</h3>');
+				$('#pesanModal').modal('show');
+			}else{
+				$('#modalencuk').html(r);				
+				$('#pesanModal').modal('show');
+			}
+			
+			$('#grid_nya_penjualan').show();
+			$('#detil_nya_penjualan').empty().hide();
+			$('#grid_penjualan').datagrid('reload');
+		});
+		return false;
+	});
+	
+	$('#kembaliKonfirm').on('click', function(){
+		$('#grid_nya_penjualan').show();
+		$('#detil_nya_penjualan').empty().hide();
+		//$('#grid_penjualan').datagrid('reload');
+	});
+	
+	
+	/*
+	$('#cetak_kartu').on('click', function(){
+		var post = {};
+		post['email'] = "{$data.email_address}";
+		openWindowWithPost(host+'cetak-kartu', post);
+	});
+	*/
+</script>

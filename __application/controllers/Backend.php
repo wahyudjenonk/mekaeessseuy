@@ -27,11 +27,62 @@ class Backend extends JINGGA_Controller {
 			switch($p1){
 				case "beranda":
 					$data=$this->mbackend->getdata('dashboard','result_array');
-					//echo "<pre>";print_r($data);
 					$this->nsmarty->assign('data',$data);
 				break;
 				case "transaksi":
-					
+					if($p2 == "invoice"){
+						$data = $this->mbackend->getdata('detail_invoice', 'variable');
+						if($data){
+							$id = $this->input->post('id');
+							$datatracking = $this->mbackend->getdata('tracking_pesanan', 'row_array', $id);							
+							$this->nsmarty->assign("datatracking", $datatracking);
+						}
+						$this->nsmarty->assign("data", $data);
+					}elseif($p2 == "konfirmasi"){
+						$no_order = $this->input->post("ord");
+						$dbbook = $this->load->database('buku',true);
+						$cek_no_order = $dbbook->get_where("tbl_h_pemesanan", array("no_order"=>$no_order) )->row_array();
+						if($cek_no_order){ 
+							$cek_konf = $this->mbackend->getdata('tbl_cek_konfirmasi', 'row_array', $cek_no_order['id'] );
+							if($cek_konf){
+								$this->nsmarty->assign( 'cek_order', "true"); 
+								$this->nsmarty->assign( 'cek_konf', "false"); 
+								$this->nsmarty->assign( 'datakonfirmasi', $cek_konf ); 
+							}else{
+								$this->nsmarty->assign( 'cek_order', "true" ); 
+								$this->nsmarty->assign( 'cek_konf', "true");
+							}
+							
+							$cek_no_order["grand_total"] = "Rp. ".number_format($cek_no_order['grand_total'],0,",",".");
+							$this->nsmarty->assign( 'data_order', $cek_no_order ); 
+						}else{ 
+							$this->nsmarty->assign( 'cek_order', "false" ); 
+						}
+						
+						$this->nsmarty->assign( 'no_order', $no_order ); 
+					}elseif($p2 == "upload"){
+						$no_order = $this->input->post("ord");
+						$dbbook = $this->load->database('buku',true);
+						$cek_no_order = $dbbook->get_where("tbl_h_pemesanan", array("no_order"=>$no_order) )->row_array();
+						if($cek_no_order){ 
+							$cek_upl = $this->mbackend->getdata('tbl_cek_uploadfile', 'row_array', $cek_no_order['id'] );
+							if($cek_upl){
+								$this->nsmarty->assign( 'cek_upl', "false"); 
+								$this->nsmarty->assign( 'cek_order', "true" ); 
+								$this->nsmarty->assign( 'dataupload', $cek_upl ); 
+							}else{
+								$this->nsmarty->assign( 'cek_upl', "true"); 								
+								$this->nsmarty->assign( 'cek_order', "true" ); 
+							}
+							
+							$this->nsmarty->assign( 'data_order', $cek_no_order ); 
+							
+						}else{ 
+							$this->nsmarty->assign( 'cek_order', "false" ); 
+						}	
+						
+						$this->nsmarty->assign( 'no_order', $no_order ); 
+					}
 				break;
 				case "setting":
 					
@@ -55,8 +106,6 @@ class Backend extends JINGGA_Controller {
 		if(!file_exists($this->config->item('appl').APPPATH.'views/'.$temp)){$this->nsmarty->display('konstruksi.html');}
 		else{$this->nsmarty->display($temp);}
 	}
-	
-	
 	
 	function get_report($mod){
 		$temp="backend/report/".$mod.".html";
@@ -84,37 +133,7 @@ class Backend extends JINGGA_Controller {
 		if(!file_exists($this->config->item('appl').APPPATH.'views/'.$temp)){$this->nsmarty->display('konstruksi.html');}
 		else{$this->nsmarty->display($temp);}
 	}
-	function get_konten($p1=""){
-		if($p1!="")$mod=$p1;
-		else $mod=$this->input->post('mod');
-		if($this->input->post('table'))$mod=$this->input->post('table');
-		//echo $mod;
-		$this->nsmarty->assign('mod',$mod);
-		$temp="backend/modul/".$mod.".html";
-		switch($mod){
-			case "trans_buku_sekolah":
-			case "trans_buku_umum":
-				//if($mod=='gudang_konfirmasi'){}
-				$cetak=$this->input->post('flag_cetak');
-				$temp="backend/modul/invoice.html";
-				$data=$this->mbackend->getdata('get_pemesanan_buku','result_array');
-				//echo "<pre>";print_r($data);
-				$this->nsmarty->assign('data',$data);
-			break;
-			case "trans_media_sekolah":
-			case "trans_media_umum":
-				//if($mod=='gudang_konfirmasi'){}
-				$cetak=$this->input->post('flag_cetak');
-				$temp="backend/modul/invoice.html";
-				$data=$this->mbackend->getdata('get_pemesanan_media','result_array');
-				//echo "<pre>";print_r($data);
-				$this->nsmarty->assign('data',$data);
-			break;
-		}
-		$this->nsmarty->assign('temp',$temp);
-		if(!file_exists($this->config->item('appl').APPPATH.'views/'.$temp)){$this->nsmarty->display('konstruksi.html');}
-		else{$this->nsmarty->display($temp);}
-	}
+	
 	function get_form($mod){
 		$temp='backend/form/'.$mod.".html";
 		$sts=$this->input->post('editstatus');
@@ -166,94 +185,7 @@ class Backend extends JINGGA_Controller {
 		
 		echo $this->mbackend->simpandata($p1, $post, $editstatus);
 	}
-	
-	function test(){
-		$a=array
-		(
-			'id'=> 6,
-			'services_name' => 'Basic Housekeeping Service',
-			'code'=> 'A.1',
-			'desc_services_eng' => 'Basic Housekeeping Service is when host is providing the cleaning tools as mentioned in Terms & Conditions'
-		);
-		$b=array
-		(
-			'id_price' => 1,
-			'tbl_services_id' => 6,
-			'of_unit' => 1,
-			'of_area_item' => 1,
-			'percen' => '',
-			'rate' => 8000,
-			'type' => 'per m2',
-			'remark' => '1x time payment'
-		);
-		print_r(array_merge($a,$b));
 		
-	}
-	function combo_option($mod){
-		$opt="";
-		switch($mod){
-			case "registration":
-				$opt .="<option value='A.email'>Email</option>";
-				$opt .="<option value='A.owner_name_last'>Last Name</option>";
-				$opt .="<option value='A.owner_name_first'>First Name</option>";
-				$opt .="<option value='A.id_number'>ID Number</option>";
-				$opt .="<option value='A.company_name'>Company Name</option>";
-			break;
-			case "registration":
-				$opt .="<option value='A.email_address'>Email</option>";
-				$opt .="<option value='B.owner_name_last'>Last Name</option>";
-				$opt .="<option value='B.owner_name_first'>First Name</option>";
-				$opt .="<option value='B.id_number'>ID Number</option>";
-				$opt .="<option value='B.company_name'>Company Name</option>";
-			break;
-			case "property":
-				$opt .="<option value='C.owner_name_first'>First Name</option>";
-				$opt .="<option value='C.owner_name_last'>Last Name</option>";
-				$opt .="<option value='A.apartment_name'>Apartment Name</option>";
-			break;
-			case "housekeeping":
-			case "check":
-			case "hosting":
-			case "linen":
-			case "full_host":
-				$opt .="<option value='services_name'>Services Name</option>";
-			break;
-			case "invoice_package":
-			case "invoice":
-			case "planning":
-			case "planning_package":
-			case "reservation":
-				$opt .="<option value='A.no_invoice'>No Invoice</option>";
-				$opt .="<option value='B.method_payment'>Method Payment</option>";
-				$opt .="<option value='D.owner_name_first'>First Name</option>";
-				$opt .="<option value='D.owner_name_last'>Last Name</option>";
-				$opt .="<option value='E.apartment_name'>Unit Name</option>";
-			break;
-			case "cl_facility_unit":
-				$opt .="<option value='A.facility_name'>Facility Name</option>";
-				$opt .="<option value='A.unit'>Unit</option>";
-			break;
-			case "cl_compulsary_periodic_payment":
-				$opt .="<option value='A.compulsary_periodic_payment'>Comp. Per. Payment</option>";
-				$opt .="<option value='A.description'>Desc</option>";
-			break;
-			case "cl_room_type":
-				$opt .="<option value='A.room_type'>Room Type</option>";
-				$opt .="<option value='A.description'>Desc</option>";
-			break;
-		}
-		return $opt;
-	}
-	function set_flag($p1){
-		$post = array();
-        foreach($_POST as $k=>$v){
-			if($this->input->post($k)!=""){
-				$post[$k] = $this->input->post($k);
-			}
-			
-		}
-		echo $this->mbackend->set_flag($p1,$post);
-	}
 	function cetak(){
 		$mod=$this->input->post('mod');
 			switch($mod){
@@ -330,6 +262,7 @@ class Backend extends JINGGA_Controller {
 			break;
 		}
 	}
+	
 	function get_chart(){
 		$chart=array();
 		$x=array();
@@ -406,9 +339,206 @@ class Backend extends JINGGA_Controller {
 		else{$this->nsmarty->display($temp);}
 	}
 	
-	function generatepdf($type){
+	function generatepdf($type, $p1="", $p2="", $p3=""){
 		$this->load->library('mlpdf');	
 		switch($type){
+			case "bastnya":
+				$this->load->helper('terbilang');
+				$inv = $p1;
+				if(!$inv){
+					echo "<center><h1>No. Invoice Tidak Valid</h1></center>";
+					exit;
+				}
+				$data_invoice = $this->mbackend->getdata('header_pesanan', 'row_array', $inv);
+				if($data_invoice){
+					$no_bast = $data_invoice['no_order']."/OLS-MKS/BAST/XII/".date('Y');
+					$datacust = $this->mbackend->getdata('datacustomer', 'row_array', $data_invoice['tbl_registrasi_id'], '', 'cetak_bast');
+					$datadetailpesanan = $this->mbackend->getdata('detail_pesanan', 'result_array', $data_invoice['idpesan']);
+					$totqty = 0;
+					$tottotal = 0;
+					foreach($datadetailpesanan as $k => $v){
+						$totqty += $v['qty'];
+						$tottotal += $v['subtotal'];
+						
+						$datadetailpesanan[$k]['harga'] = number_format($v['harga'],0,",",".");
+						$datadetailpesanan[$k]['subtotal'] = number_format($v['subtotal'],0,",",".");
+						$datadetailpesanan[$k]['nama_group'] = strtoupper(substr($v['nama_group'], 0,1));
+					}
+					
+					$dbbook = $this->load->database('buku',true);
+					$cekdatabast = $dbbook->get_where('tbl_bast', array('tbl_h_pemesanan_id'=>$data_invoice['idpesan']) )->row_array();
+					if(!$cekdatabast){
+						$array_insert_bast = array(
+							'tbl_h_pemesanan_id' => $data_invoice['idpesan'],
+							'no_bast' => $no_bast,
+							'create_date' => date('Y-m-d H:i:s')
+						);
+						$dbbook->insert('tbl_bast', $array_insert_bast);
+						
+						$tgl = $this->lib->konversi_tgl(date('Y-m-d'));
+						$time = $this->lib->konversi_jam(date('H:i:s'));
+					}else{
+						$tgl_create_1 = explode(" ",$cekdatabast["create_date"]);
+						
+						$tgl = $this->lib->konversi_tgl($tgl_create_1[0]);
+						$time = $this->lib->konversi_jam($tgl_create_1[1]);
+					}
+										
+					$this->nsmarty->assign('datainvoice', $data_invoice);
+					$this->nsmarty->assign('datakonfirmasi', $datakonfirmasi);
+					$this->nsmarty->assign('datacust', $datacust);
+					$this->nsmarty->assign('datadetailpesanan', $datadetailpesanan);
+					$this->nsmarty->assign('totqty', $totqty);
+					$this->nsmarty->assign('tgl', $tgl);
+					$this->nsmarty->assign('time', $time);
+					$this->nsmarty->assign('no_bast', $no_bast);
+					$this->nsmarty->assign('tottotal', number_format($tottotal,0,",","."));
+				}else{
+					echo "<center><h1>No. Invoice Tidak Valid</h1></center>";
+					exit;
+				}
+				
+				$filename = str_replace('/', '_', $no_bast);
+				$htmlcontent = $this->nsmarty->fetch('backend/modul/transaksi/pdf_bast.html');
+				
+				$pdf = $this->mlpdf->load();
+				$spdf = new mPDF('', 'A4', 0, '', 12.7, 12.7, 10, 10, 5, 2, 'P');
+				$spdf->ignore_invalid_utf8 = true;
+				$spdf->allow_charset_conversion = true;     // which is already true by default
+				$spdf->charset_in = 'iso-8859-2';  // set content encoding to iso
+				$spdf->SetDisplayMode('fullpage');		
+				$spdf->SetProtection(array('print'));				
+				$spdf->WriteHTML($htmlcontent); // write the HTML into the PDF
+				//$spdf->Output($general_path.$subgroup."/".$io_number."/"."PARTIAL-".$partial_no."/LOA/".$filename.'.pdf', 'F'); // save to file because we can
+				$spdf->Output($filename.'.pdf', 'I'); // view file
+			break;
+			case "kwitansinya":
+				$this->load->helper('terbilang');
+				$inv = $p1;
+				if(!$inv){
+					echo "<center><h1>No. Invoice Tidak Valid</h1></center>";
+					exit;
+				}				
+				$data_invoice = $this->mbackend->getdata('header_pesanan', 'row_array', $inv);
+				if($data_invoice){
+					$no_kwitansi = $data_invoice['no_order']."/OLS-MKS/K/".date('Y');
+					$datacust = $this->mbackend->getdata('datacustomer', 'row_array', $data_invoice['tbl_registrasi_id'], '', 'cetak_bast');
+					$jumlah = number_to_words($data_invoice['grand_total']);
+					
+					$dbbook = $this->load->database('buku',true);
+					$cekdatakwitansi = $dbbook->get_where('tbl_kwitansi', array('tbl_h_pemesanan_id'=>$data_invoice['idpesan']) )->row_array();
+					if(!$cekdatakwitansi){
+						$array_insert_kwitansi = array(
+							'tbl_h_pemesanan_id' => $data_invoice['idpesan'],
+							'no_kwitansi' => $no_kwitansi,
+							'create_date' => date('Y-m-d H:i:s')
+						);
+						$dbbook->insert('tbl_kwitansi', $array_insert_kwitansi);
+						$tglgenerate = date('Y-m-d H:i:s');
+					}else{
+						$tglgenerate = $cekdatakwitansi["create_date"];
+					}
+					
+					$this->nsmarty->assign('datainvoice', $data_invoice);
+					$this->nsmarty->assign('datacust', $datacust);
+					$this->nsmarty->assign('jumlah', $jumlah);
+					$this->nsmarty->assign('tglgenerate', $tglgenerate);
+					$this->nsmarty->assign('no_kwitansi', $no_kwitansi);
+					$this->nsmarty->assign('grandtotal', number_format($data_invoice['grand_total'],0,",",".") );
+				}else{
+					echo "<center><h1>No. Invoice Tidak Valid</h1></center>";
+					exit;
+				}
+				
+				$filename = str_replace('/', '_', $no_kwitansi);
+				$htmlcontent = $this->nsmarty->fetch('backend/modul/transaksi/pdf_kwitansi.html');
+								
+				$pdf = $this->mlpdf->load();
+				$spdf = new mPDF('', 'A4', 0, '', 12.7, 12.7, 15, 15, 5, 2, 'L');
+				//$spdf = new mPDF('', 'A5-L', 0, '', 5, 5, 5, 5, 0, 0);
+				$spdf->ignore_invalid_utf8 = true;
+				$spdf->allow_charset_conversion = true;     // which is already true by default
+				$spdf->charset_in = 'iso-8859-2';  // set content encoding to iso
+				$spdf->SetDisplayMode('fullpage');		
+				$spdf->SetProtection(array('print'));				
+				$spdf->WriteHTML($htmlcontent); // write the HTML into the PDF
+				//$spdf->Output($general_path.$subgroup."/".$io_number."/"."PARTIAL-".$partial_no."/LOA/".$filename.'.pdf', 'F'); // save to file because we can
+				$spdf->Output($filename.'.pdf', 'I'); // view file
+			break;
+			case "tandaterimanya":
+				//$no_tanda_terima = $data_invoice['no_order']."/ASP/TT/".date('Y');
+				$inv = $p1;
+				if(!$inv){
+					echo "<center><h1>No. Invoice Tidak Valid</h1></center>";
+					exit;
+				}	
+				
+				$data_invoice = $this->mbackend->getdata('header_pesanan', 'row_array', $inv);
+				if($data_invoice){
+					$datadetailpesanan = $this->mbackend->getdata('detail_pesanan', 'result_array', $data_invoice['idpesan']);
+					foreach($datadetailpesanan as $k=>$v){
+						$datadetailpesanan[$k]['harga'] = number_format($v['harga'],0,",",".");
+						$datadetailpesanan[$k]['subtotal'] = number_format($v['subtotal'],0,",",".");
+					}
+					$this->nsmarty->assign('datadetailpesanan', $datadetailpesanan);
+					$this->nsmarty->assign('data_invoice', $data_invoice);
+					$this->nsmarty->assign('inv', $inv);
+				}else{
+					echo "<center><h1>No. Invoice Tidak Valid</h1></center>";
+					exit;
+				}
+				
+				$filename = str_replace('/', '_', $inv);
+				$htmlcontent = $this->nsmarty->fetch('backend/modul/transaksi/pdf_tanda_terima.html');
+				
+				$pdf = $this->mlpdf->load();
+				//$spdf = new mPDF('', 'A5', 0, '', 12.7, 12.7, 15, 20, 5, 2, 'L');
+				$spdf = new mPDF('', 'A4', 0, '', 12.7, 12.7, 15, 20, 5, 2, 'P');				
+				$spdf->ignore_invalid_utf8 = true;
+				$spdf->allow_charset_conversion = true;     // which is already true by default
+				$spdf->charset_in = 'iso-8859-2';  // set content encoding to iso
+				$spdf->SetDisplayMode('fullpage');		
+				$spdf->SetProtection(array('print'));				
+				$spdf->WriteHTML($htmlcontent); // write the HTML into the PDF
+				//$spdf->Output($general_path.$subgroup."/".$io_number."/"."PARTIAL-".$partial_no."/LOA/".$filename.'.pdf', 'F'); // save to file because we can
+				$spdf->Output($filename.'.pdf', 'I'); // view file
+			break;
+			case "suratpesanannya":
+				$inv = $p1;
+				if(!$inv){
+					echo "<center><h1>No. Invoice Tidak Valid</h1></center>";
+					exit;
+				}				
+				$data_invoice = $this->mbackend->getdata('header_pesanan', 'row_array', $inv);
+				if($data_invoice){
+					$datadetailpesanan = $this->mbackend->getdata('detail_pesanan', 'result_array', $data_invoice['idpesan']);
+					foreach($datadetailpesanan as $k=>$v){
+						$datadetailpesanan[$k]['harga'] = number_format($v['harga'],0,",",".");
+						$datadetailpesanan[$k]['subtotal'] = number_format($v['subtotal'],0,",",".");
+					}
+					$this->nsmarty->assign('datadetailpesanan', $datadetailpesanan);
+					$this->nsmarty->assign('data_invoice', $data_invoice);
+					$this->nsmarty->assign('inv', $inv);
+				}else{
+					echo "<center><h1>No. Invoice Tidak Valid</h1></center>";
+					exit;
+				}
+				
+				$filename = str_replace('/', '_', $inv);
+				$htmlcontent = $this->nsmarty->fetch('backend/modul/transaksi/pdf_surat_pesanan.html');
+				
+				$pdf = $this->mlpdf->load();
+				//$spdf = new mPDF('', 'A5', 0, '', 12.7, 12.7, 15, 20, 5, 2, 'L');
+				$spdf = new mPDF('', 'A4', 0, '', 12.7, 12.7, 15, 20, 5, 2, 'P');				
+				$spdf->ignore_invalid_utf8 = true;
+				$spdf->allow_charset_conversion = true;     // which is already true by default
+				$spdf->charset_in = 'iso-8859-2';  // set content encoding to iso
+				$spdf->SetDisplayMode('fullpage');		
+				$spdf->SetProtection(array('print'));				
+				$spdf->WriteHTML($htmlcontent); // write the HTML into the PDF
+				//$spdf->Output($general_path.$subgroup."/".$io_number."/"."PARTIAL-".$partial_no."/LOA/".$filename.'.pdf', 'F'); // save to file because we can
+				$spdf->Output($filename.'.pdf', 'I'); // view file
+			break;
 			case "cetak_kartu":
 				$email = $this->input->post('email');
 				if(!$email){
