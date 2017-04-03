@@ -269,16 +269,17 @@ function genGrid(modnya, divnya, lebarnya, tingginya, par1,db_flag){
 			param['db_flag'] = "B";
 			frozen[modnya] = [];
 			kolom[modnya] = [	
+				{field:"nama_sales",title:'<b>Nama Sales</b>',width:200, halign:'center',align:'left',hidden:(role == "PIC" ? false : true)},				
+				{field:'kode_marketing',title:'<b>Kode Sales</b>',width:100, halign:'center',align:'center',hidden:(role == "PIC" ? false : true)},							
 				{field:'no_order',title:'<b>No. Invoice</b>',width:130, halign:'center',align:'center'},							
-				{field:'tgl_order',title:'<b>Tgl. Order</b>',width:150, halign:'center',align:'center'},			
-				{field:'zona',title:'<b>Zona</b>',width:80, halign:'center',align:'center'},				
-				{field:"nama_sekolah",title:'<b>Nama Sekolah</b>',width:200, halign:'center',align:'left'},
-				{field:'grand_total',title:'<b>Grand Total</b>',width:150, halign:'center',align:'right',
+				{field:'tanggal_order',title:'<b>Tgl. Order</b>',width:150, halign:'center',align:'center'},			
+				{field:'zona',title:'<b>Zona</b>',width:50, halign:'center',align:'center'},				
+				{field:"nama_sekolah",title:'<b>Nama Sekolah</b>',width:300, halign:'center',align:'left'},
+				{field:'grand_total',title:'<b>Grand Total</b>',width:110, halign:'center',align:'right',
 					formatter:function(value,rowData,rowIndex){
 						return NumberFormat(value);
 					}
 				},
-				{field:"nama_sales",title:'<b>Sales</b>',width:200, halign:'center',align:'left',hidden:(role == "PIC" ? false : true)},
 			];
 		break;		
 		
@@ -689,16 +690,47 @@ function genTab(div, mod, sub_mod, tab_array, div_panel, judul_panel, mod_num, h
 function kumpulAction(type, p1, p2, p3, p4, p5){
 	var param = {};
 	switch(type){
-		case "reservation":
-			grid = $('#grid_reservasi').datagrid('getSelected');
-			$.post(host+'backend/simpan_data/tbl_reservasi_confirm', { 'id':grid.id, 'confirm':p1 }, function(rsp){
-				if(rsp == 1){
-					$.messager.alert('Roger Salon',"Confirm OK",'info');
-				}else{
-					$.messager.alert('Roger Salon',"Failed Confirm",'error');
-				}
-				$('#grid_reservasi').datagrid('reload');	
-			} );
+		case "invoice":
+			grid = $('#grid_penjualan').datagrid('getSelected');
+			if(grid){
+				$('#grid_nya_penjualan').hide();
+				$('#detil_nya_penjualan').empty().show().addClass("loading");
+				$.post(host+'backoffice-konten/transaksi/invoice', {  'id':grid.id }, function(resp){
+					$('#detil_nya_penjualan').show();
+					$('#detil_nya_penjualan').html(resp);
+					$('#detil_nya_penjualan').removeClass("loading");
+				});
+			}else{
+				$.messager.alert('MKS-Store Marketing',"Pilih Data Terlebih Dahulu",'error');
+			}
+		break;
+		case "konfirmasi":
+			grid = $('#grid_penjualan').datagrid('getSelected');
+			if(grid){
+				$('#grid_nya_penjualan').hide();
+				$('#detil_nya_penjualan').empty().show().addClass("loading");
+				$.post(host+'backoffice-konten/transaksi/konfirmasi', {  'ord':grid.no_order }, function(resp){
+					$('#detil_nya_penjualan').show();
+					$('#detil_nya_penjualan').html(resp);
+					$('#detil_nya_penjualan').removeClass("loading");
+				});
+			}else{
+				$.messager.alert('MKS-Store Marketing',"Pilih Data Terlebih Dahulu",'error');
+			}
+		break;
+		case "upload":
+			grid = $('#grid_penjualan').datagrid('getSelected');
+			if(grid){
+				$('#grid_nya_penjualan').hide();
+				$('#detil_nya_penjualan').empty().show().addClass("loading");
+				$.post(host+'backoffice-konten/transaksi/upload', {  'ord':grid.no_order }, function(resp){
+					$('#detil_nya_penjualan').show();
+					$('#detil_nya_penjualan').html(resp);
+					$('#detil_nya_penjualan').removeClass("loading");
+				});
+			}else{
+				$.messager.alert('MKS-Store Marketing',"Pilih Data Terlebih Dahulu",'error');
+			}
 		break;
 	}
 }	
