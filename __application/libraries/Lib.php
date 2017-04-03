@@ -125,7 +125,7 @@ class Lib {
 				$ci->nsmarty->assign('password', $p1['password']);
 				$ci->nsmarty->assign('kodemarketing', $p1['member_user']);
 				$html = $ci->nsmarty->fetch('backend/email-password.html');
-				$subject = "EMAIL REGISTRASI TOOLS MARKETING ALDEAZ";
+				$subject = "EMAIL REGISTRASI TOOLS MARKETING MKS Store";
 			break;
 			case "email_konfirmasi":	
 				$ci->nsmarty->assign('no_order', $p1);
@@ -147,7 +147,7 @@ class Lib {
 		);
 				
 		$ci->email->initialize($config);
-		//$ci->email->from("aldeaz.id@gmail.com", "Aldeaz Notifikasi");
+		//$ci->email->from("noe.id@gmail.com", "MKS Store Notifikasi");
 		$ci->email->from("notification@mks-store.id", "MKS-Store Notifikasi");
 		$ci->email->to($email);
 		$ci->email->subject($subject);

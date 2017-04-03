@@ -542,7 +542,7 @@ class Backend extends JINGGA_Controller {
 			case "cetak_kartu":
 				$email = $this->input->post('email');
 				if(!$email){
-					echo "tutup tab browser ini, dan generate kembali melalui tombol di web www.aldeaz.id";
+					echo "tutup tab browser ini, dan generate kembali melalui tombol di web mks-store.id";
 					exit;
 				}
 				

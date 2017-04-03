@@ -903,7 +903,7 @@ function cariData(acak){
 	if($('#kat_'+acak).val()!=''){
 		grid_nya.datagrid('reload',post_search);
 	}else{
-		$.messager.alert('Aldeaz Back-Office',"Pilih Kategori Pencarian",'error');
+		$.messager.alert('MKS Back-Office',"Pilih Kategori Pencarian",'error');
 	}
 	//$('#grid_'+typecari).datagrid('reload', post_search);
 }
