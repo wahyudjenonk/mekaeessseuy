@@ -4,7 +4,11 @@
 /* defaults */
 /**/
 .sky-form {
-	margin: 0;
+	position: absolute;
+	margin-top: -225px;
+	margin-left: -225px;
+	left: 50%;top: 50%;
+	*margin: 0;
 	outline: none;
 	box-shadow: 0 0 20px rgba(0,0,0,.3);
 	font: 13px/1.55 'Open Sans', Helvetica, Arial, sans-serif;
@@ -15,6 +19,7 @@
 	padding: 0;
 }
 .sky-form header {
+	
 	display: block;
 	padding: 20px 30px;	
 	border-bottom: 1px solid rgba(0,0,0,.1);
