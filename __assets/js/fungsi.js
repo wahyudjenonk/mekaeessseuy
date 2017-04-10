@@ -260,6 +260,28 @@ function genGrid(modnya, divnya, lebarnya, tingginya, par1,db_flag){
 				{field:'alamat',title:'<b>Alamat</b>',width:350, halign:'center',align:'left'},						
 			];
 		break;		
+		case "penjualanumum":
+			urlnya = modnya;
+			fitnya = true;
+			nowrap=false;
+			row_number=true;
+			urlglobal = host+'backoffice-Data/'+urlnya;
+			param['db_flag'] = "B";
+			frozen[modnya] = [];
+			kolom[modnya] = [	
+				{field:"nama_sales",title:'<b>Nama Sales</b>',width:200, halign:'center',align:'left',hidden:(role == "PIC" ? false : true)},				
+				{field:'kode_marketing',title:'<b>Kode Sales</b>',width:100, halign:'center',align:'center',hidden:(role == "PIC" ? false : true)},							
+				{field:'no_order',title:'<b>No. Invoice</b>',width:130, halign:'center',align:'center'},							
+				{field:'tanggal_order',title:'<b>Tgl. Order</b>',width:150, halign:'center',align:'center'},			
+				{field:'zona',title:'<b>Zona</b>',width:50, halign:'center',align:'center'},				
+				{field:"nama_lengkap",title:'<b>Nama Pelanggan</b>',width:300, halign:'center',align:'left'},
+				{field:'grand_total',title:'<b>Grand Total</b>',width:110, halign:'center',align:'right',
+					formatter:function(value,rowData,rowIndex){
+						return NumberFormat(value);
+					}
+				},
+			];
+		break;		
 		case "penjualan":
 			urlnya = modnya;
 			fitnya = true;
@@ -690,6 +712,20 @@ function genTab(div, mod, sub_mod, tab_array, div_panel, judul_panel, mod_num, h
 function kumpulAction(type, p1, p2, p3, p4, p5){
 	var param = {};
 	switch(type){
+		case "invoiceumum":
+			grid = $('#grid_penjualanumum').datagrid('getSelected');
+			if(grid){
+				$('#grid_nya_penjualanumum').hide();
+				$('#detil_nya_penjualanumum').empty().show().addClass("loading");
+				$.post(host+'backoffice-konten/transaksi/invoice', {  'id':grid.id }, function(resp){
+					$('#detil_nya_penjualanumum').show();
+					$('#detil_nya_penjualanumum').html(resp);
+					$('#detil_nya_penjualanumum').removeClass("loading");
+				});
+			}else{
+				$.messager.alert('MKS-Store Marketing',"Pilih Data Terlebih Dahulu",'error');
+			}
+		break;
 		case "invoice":
 			grid = $('#grid_penjualan').datagrid('getSelected');
 			if(grid){
