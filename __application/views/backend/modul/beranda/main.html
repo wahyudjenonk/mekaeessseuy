@@ -1,5 +1,5 @@
-{assign var=sisa_buku_sekolah value=(5- count($data.trans_buku_sekolah))}
-{assign var=sisa_buku_umum value=(5- count($data.trans_buku_umum))}
+{assign var=sisa_buku_sekolah value=(10- count($data.trans_buku_sekolah))}
+{assign var=sisa_buku_umum value=(10- count($data.trans_buku_umum))}
 
 
 <div class="page-header position-relative">
@@ -26,6 +26,7 @@
 					<tr>
 						<th style="text-align:left;">No.</th>
 						<th style="text-align:left;">No Order</th>
+						<th style="text-align:left;">Tgl Order</th>
 						<th style="text-align:right;">Total</th>
 					</tr>
 					</thead>
@@ -34,11 +35,13 @@
 					<tr>
 						<td>{$smarty.foreach.x.iteration}</td>
 						<td>{$i.no_order|default:'-'}</td>
+						<td>{$i.tanggal_order|default:'-'}</td>
 						<td style="text-align:right;">{$i.grand_total|number_format:2:',':'.'|default:'-'}</td>
 					</tr>
 					{/foreach}
 					{for $foo=1 to $sisa_buku_sekolah}
 					<tr>
+						<td>-</td>
 						<td>-</td>
 						<td>-</td>
 						<td style="text-align:right;">-</td>
@@ -61,6 +64,7 @@
 					<tr>
 						<th style="text-align:left;">No.</th>
 						<th style="text-align:left;">No Order</th>
+						<th style="text-align:left;">Tgl Order</th>
 						<th style="text-align:right;">Total</th>
 					</tr>
 					</thead>
@@ -69,11 +73,13 @@
 					<tr>
 						<td>{$smarty.foreach.x.iteration}</td>
 						<td>{$i.no_order|default:'-'}</td>
+						<td>{$i.tanggal_order|default:'-'}</td>
 						<td style="text-align:right;">{$i.grand_total|number_format:2:',':'.'|default:'-'}</td>
 					</tr>
 					{/foreach}
 					{for $foo=1 to $sisa_buku_umum}
 					<tr>
+						<td>-</td>
 						<td>-</td>
 						<td>-</td>
 						<td style="text-align:right;">-</td>

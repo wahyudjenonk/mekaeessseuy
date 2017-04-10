@@ -1,0 +1,58 @@
+<div id="grid_nya_{$mod}" style="width:100%">
+	<div style='margin-bottom:3px;background:#F9F9F9;padding:10px;'>
+		<label style='width:100px;'>No. Invoice</label>
+		<input type="text" id="no_dok_{$acak}" style="width:150px;">
+		
+		&nbsp;&nbsp;&nbsp;
+		<label style='width:100px;'>Nama Sekolah</label>
+		<input type="text" id="nm_sekolah_{$acak}" style="width:250px;">
+		
+		&nbsp;&nbsp;&nbsp;
+		<a href="javascript:void(0)" style='margin-top:-10px' id='search_adv' class="l-btn l-btn-small l-btn-plain" group="" onClick="advancedSearch('advanced_search', 'tbl_upload_file_advanced_search', '{$acak}');">
+			<span class="l-btn-left l-btn-icon-left">
+				<span class="l-btn-text">Cari</span><span class="l-btn-icon icon-search">&nbsp;</span>
+			</span>
+		</a>	
+		&nbsp;&nbsp;&nbsp;
+		<a href="javascript:void(0)" style='margin-top:-10px' class="l-btn l-btn-small l-btn-plain" group="" onClick="advancedSearch('advanced_search', 'tbl_upload_file_advanced_search', '{$acak}', 'balikin');">
+			<span class="l-btn-left l-btn-icon-left">
+				<span class="l-btn-text">Refresh Data</span><span class="l-btn-icon icon-reload">&nbsp;</span>
+			</span>
+		</a>
+		<br />
+		<br />
+		<div style="height:16px;">
+			<a href="javascript:void(0)" style='margin-top:-10px' id='lihat_detail' class="l-btn l-btn-small l-btn-plain" group="" onClick="kumpulAction('invoiceumum');">
+				<span class="l-btn-left l-btn-icon-left">
+					<span class="l-btn-text">Lihat Detail</span><span class="l-btn-icon icon-report">&nbsp;</span>
+				</span>
+			</a>	
+			{*
+			{if $auth.role eq "SALES"}
+				<a href="javascript:void(0)" style='margin-top:-10px' id='konfirmasi_pemb' class="l-btn l-btn-small l-btn-plain" group="" onClick="kumpulAction('konfirmasi');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Konfirmasi Pembayaran</span><span class="l-btn-icon icon-ok">&nbsp;</span>
+					</span>
+				</a>	
+				<a href="javascript:void(0)" style='margin-top:-10px' id='upload_bast_kwitansi' class="l-btn l-btn-small l-btn-plain" group="" onClick="kumpulAction('upload');">
+					<span class="l-btn-left l-btn-icon-left">
+						<span class="l-btn-text">Upload Bast & Kwitansi</span><span class="l-btn-icon icon-upload">&nbsp;</span>
+					</span>
+				</a>	
+			{/if}
+			*}
+		</div>
+	</div>	
+	{include file="backend/template/grid-2.html" main="penjualanumum" table='penjualanumum' height_grid="(getClientHeight()-205)"}
+</div>
+<div id='detil_nya_{$mod}' width='100%'></div>
+
+
+<script>	
+	$(document).keypress(function(e) {
+		if(e.which == 13) {
+			//advancedSearch('advanced_search', 'tbl_upload_file_advanced_search', '{$acak}');
+			$('#search_adv').trigger('click');
+		}
+	});
+</script>

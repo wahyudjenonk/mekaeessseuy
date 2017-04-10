@@ -9,20 +9,83 @@ class Mbackend extends CI_Model{
 	
 	function getdata($type="", $balikan="", $p1="", $p2="",$p3="",$p4=""){
 		$where = " WHERE 1=1 ";
-		$flag = $this->input->post('db_flag');
+		//$flag = $this->input->post('db_flag');
+		$flag = "XX";
 		if($this->input->post('key')){
 				$where .=" AND ".$this->input->post('kat')." like '%".$this->db->escape_str($this->input->post('key'))."%'";
 		}
 		
-		if($flag){
+		if($flag != "XX"){
 			$this->get_koneksi($this->input->post('db_flag'));
 		}
 		if($balikan=='get'){$where .=" AND A.id=".$this->input->post('id');}
 		
 		switch($type){
+			case "dashboard":
+				$data=array();
+				$where = " WHERE 1=1 ";
+				$where2 = " WHERE 1=1 ";
+				
+				//$this->get_koneksi('B');
+				if($this->auth["role"] == "PIC"){
+					$sqlsales = "
+						SELECT registration_code
+						FROM tbl_registration
+						WHERE pic_id = ".$this->auth["id"]."
+					";
+					$querysales = $this->db->query($sqlsales)->result_array();
+					$arraysales = array();
+					foreach($querysales as $k=>$v){
+						$arraysales[$k] = $v['registration_code'];
+					}
+					if($arraysales){
+						$join_array = join("','",$arraysales);
+						$where .= "
+							AND A.kode_marketing IN ('".$join_array."') 
+						";
+						$where2 .= "
+							AND A.kode_marketing IN ('".$join_array."') 
+						";
+					}else{
+						$where .= "
+							AND A.kode_marketing = '".$this->auth['registration_code']."'
+						";
+						$where2 .= "
+							AND A.kode_marketing = '".$this->auth['registration_code']."'
+						";
+					}
+				}else{
+					$where .= " AND A.kode_marketing='".$this->auth['registration_code']."' ";
+					$where2 .= " AND A.kode_marketing='".$this->auth['registration_code']."' ";
+				}
+				
+				$sql_sekolah = "
+					SELECT A.no_order,A.grand_total,  
+						DATE_FORMAT(A.tgl_order,'%d %b %Y %h:%i %p') as tanggal_order
+					FROM tbl_h_pemesanan A
+					LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id
+					$where AND B.jenis_pembeli='SEKOLAH'
+					ORDER BY A.tgl_order DESC LIMIT 0, 10
+				";
+				
+				$sql_umum = "
+					SELECT A.no_order,A.grand_total,
+						DATE_FORMAT(A.tgl_order,'%d %b %Y %h:%i %p') as tanggal_order
+					FROM tbl_h_pemesanan A
+					LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id
+					$where AND B.jenis_pembeli='UMUM'
+					ORDER BY A.tgl_order DESC LIMIT 0, 10
+				";
+				
+				$data['trans_buku_sekolah'] = $this->db->query($sql_sekolah)->result_array();
+				$data['trans_buku_umum'] = $this->db->query($sql_umum)->result_array();
+				
+				//$this->db_remote->close();
+				return $data;
+			break;			
 			case "getemail_cust":
-				$flag = "B";
-				$this->get_koneksi("B");
+				//$flag = "B";
+				//$this->get_koneksi("B");
 				$sql = "
 					SELECT B.email
 					FROM tbl_h_pemesanan A 
@@ -31,8 +94,8 @@ class Mbackend extends CI_Model{
 				";
 			break;
 			case "tbl_cek_konfirmasi":
-				$flag = "B";
-				$this->get_koneksi("B");
+				//$flag = "B";
+				//$this->get_koneksi("B");
 				$sql = "
 					SELECT A.*,
 						DATE_FORMAT(A.create_date,'%d %b %Y %h:%i %p') as tanggal_konfirmasi,
@@ -42,8 +105,8 @@ class Mbackend extends CI_Model{
 				";
 			break;
 			case "tbl_cek_uploadfile":
-				$flag = "B";
-				$this->get_koneksi("B");
+				//$flag = "B";
+				//$this->get_koneksi("B");
 				$sql = "
 					SELECT A.*,
 						DATE_FORMAT(A.create_date,'%d %b %Y %h:%i %p') as tgl_upload
@@ -52,8 +115,8 @@ class Mbackend extends CI_Model{
 				";
 			break;
 			case "tracking_pesanan":
-				$flag = "B";
-				$this->get_koneksi("B");
+				//$flag = "B";
+				//$this->get_koneksi("B");
 				$sql = "
 					SELECT A.no_resi,
 						CASE A.verifikasi 
@@ -62,7 +125,7 @@ class Mbackend extends CI_Model{
 						END AS status_verifikasi_stok,
 						CASE A.konfirmasi
 						WHEN 'P' THEN 'VERIFIKASI PEMBAYARAN'
-						WHEN 'P' THEN 'SUDAH BAYAR'
+						WHEN 'F' THEN 'SUDAH BAYAR'
 						END AS status_konfirmasi_pembayaran,
 						CASE A.produksi
 						WHEN 'P' THEN 'PROSES PRODUKSI'
@@ -81,8 +144,8 @@ class Mbackend extends CI_Model{
 				";
 			break;
 			case "datacustomer":
-				$flag = "B";
-				$this->get_koneksi("B");
+				//$flag = "B";
+				//$this->get_koneksi("B");
 				$where = " AND A.id = '".$p1."' ";
 				$sql = "
 					SELECT A.*,
@@ -95,8 +158,8 @@ class Mbackend extends CI_Model{
 				";
 			break;			
 			case "header_pesanan":
-				$flag = "B";
-				$this->get_koneksi("B");
+				//$flag = "B";
+				//$this->get_koneksi("B");
 				$sql = "
 					SELECT A.*, A.id as idpesan, A.status as sts_pesan,
 						B.jasa_pengiriman, C.metode_pembayaran, D.*, E.provinsi, F.kab_kota, G.kecamatan
@@ -111,8 +174,8 @@ class Mbackend extends CI_Model{
 				";
 			break;
 			case "detail_pesanan":
-				$flag = "B";
-				$this->get_koneksi("B");
+				//$flag = "B";
+				//$this->get_koneksi("B");
 				$sql = "
 					SELECT A.*,
 						B.judul_buku, C.kelas, D.nama_group
@@ -125,10 +188,10 @@ class Mbackend extends CI_Model{
 			break;			
 			
 			case "detail_invoice":
-				$this->get_koneksi("B");
+				//$this->get_koneksi("B");
 				$data=array();
 				$id = $this->input->post('id');
-				if($id)$where .=" AND A.id=".$id;
+				if($id)$where .= " AND A.id=".$id;
 				
 				$sql = "
 					SELECT A.*,B.nama_sekolah,B.nama_lengkap,B.jenis_pembeli,
@@ -136,13 +199,13 @@ class Mbackend extends CI_Model{
 					FROM tbl_h_pemesanan A 
 					LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id ".$where."	
 				";
-				$data['header']=$this->db_remote->query($sql)->row_array();
+				$data['header'] = $this->db->query($sql)->row_array();
 				
-				$sql="SELECT A.*,B.judul_buku,(A.qty*A.harga)as total
+				$sql = "SELECT A.*,B.judul_buku,(A.qty*A.harga)as total
 					  FROM tbl_d_pemesanan A 
 					  LEFT JOin tbl_buku B ON A.tbl_buku_id=B.id
 					  WHERE A.tbl_h_pemesanan_id=".$id;
-				$data['detil']=$this->db_remote->query($sql)->result_array();
+				$data['detil'] = $this->db->query($sql)->result_array();
 				
 				return $data;
 				exit;
@@ -152,11 +215,48 @@ class Mbackend extends CI_Model{
 					SELECT A.*, B.provinsi, C.kab_kota, D.kecamatan,
 						DATE_FORMAT(A.registration_date,'%d %b %Y %h:%i %p') as tgl_daftar
 					FROM tbl_registration A 
-					LEFT JOIN cl_provinsi B ON B.kode_prov = A.cl_provinsi_id
-					LEFT JOIN cl_kab_kota C ON C.kode_kab_kota = A.cl_kab_kota_id
-					LEFT JOIN cl_kecamatan D ON D.kode_kecamatan = A.cl_kecamatan_id
+					LEFT JOIN cl_provinsi_indo B ON B.kode_prov = A.cl_provinsi_id
+					LEFT JOIN cl_kab_kota_indo C ON C.kode_kab_kota = A.cl_kab_kota_id
+					LEFT JOIN cl_kecamatan_indo D ON D.kode_kecamatan = A.cl_kecamatan_id
 					$where AND A.pic_id = ".$this->auth["id"]."
 				";
+			break;
+			case "penjualanumum":
+				if($this->auth["role"] == "PIC"){
+					$sqlsales = "
+						SELECT registration_code
+						FROM tbl_registration
+						WHERE pic_id = ".$this->auth["id"]."
+					";
+					$querysales = $this->db->query($sqlsales)->result_array();
+					$arraysales = array();
+					foreach($querysales as $k=>$v){
+						$arraysales[$k] = $v['registration_code'];
+					}
+					if($arraysales){
+						$join_array = join("','",$arraysales);
+						$where .= "
+							AND A.kode_marketing IN ('".$join_array."') 
+						";
+					}else{
+						$where .= "
+							AND A.kode_marketing = '".$this->auth['registration_code']."'
+						";
+					}
+				}else{
+					$where .= " AND A.kode_marketing='".$this->auth['registration_code']."' ";
+				}
+				
+				$sql = "
+					SELECT A.*, B.nama_sekolah, B.nama_lengkap,
+						DATE_FORMAT(A.tgl_order,'%d %b %Y %h:%i %p') as tanggal_order
+					FROM tbl_h_pemesanan A 
+					LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id = B.id 
+					".$where." AND B.jenis_pembeli = 'UMUM'
+					ORDER BY A.id DESC
+				";
+				
+				//echo $sql;exit;
 			break;
 			case "penjualan":
 				if($this->auth["role"] == "PIC"){
@@ -203,6 +303,7 @@ class Mbackend extends CI_Model{
 				";
 			break;
 
+			
 			
 			// Kodingan Sing Lawas
 			case "report":
@@ -346,24 +447,6 @@ class Mbackend extends CI_Model{
 				
 				
 			break;
-			case "dashboard":
-				$data=array();
-				$sql_na="SELECT A.no_order,A.grand_total 
-						FROM tbl_h_pemesanan A
-						LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id ";
-				$order="ORDER BY A.tgl_order DESC
-						LIMIT 0,5 ";
-						
-				$this->get_koneksi('B');
-				$where =" WHERE A.kode_marketing='".$this->auth['registration_code']."' AND B.jenis_pembeli='SEKOLAH' ";
-				$sql=$sql_na.$where.$order;
-				$data['trans_buku_sekolah']=$this->db_remote->query($sql)->result_array();
-				$where =" WHERE A.kode_marketing='".$this->auth['registration_code']."' AND B.jenis_pembeli='UMUM' ";
-				$sql=$sql_na.$where.$order;
-				$data['trans_buku_umum']=$this->db_remote->query($sql)->result_array();
-				$this->db_remote->close();
-				return $data;
-			break;
 			case "monitoring_buku":
 			case "monitoring_media":
 				$sql="SELECT A.no_order,A.`status` as status_order,B.flag as status_konfirmasi,
@@ -428,13 +511,12 @@ class Mbackend extends CI_Model{
 			
 			case "userprofile":
 				$sql = "
-					SELECT A.*, B.member_user, C.provinsi, D.kab_kota, E.kecamatan
+					SELECT A.*, C.provinsi, D.kab_kota, E.kecamatan
 					FROM tbl_registration A
-					LEFT JOIN tbl_member B ON B.tbl_registration_id = A.id
 					LEFT JOIN cl_provinsi C ON C.kode_prov = A.cl_provinsi_id
 					LEFT JOIN cl_kab_kota D ON D.kode_kab_kota = A.cl_kab_kota_id
 					LEFT JOIN cl_kecamatan E ON E.kode_kecamatan = A.cl_kecamatan_id
-					WHERE A.email_address = '".$this->auth['email_address']."'
+					WHERE A.id = '".$this->auth['id']."'
 				";
 			break;
 			
@@ -444,39 +526,15 @@ class Mbackend extends CI_Model{
 		}
 		
 		if($balikan == 'json'){
-			if($flag){
-				return $this->get_json_grid($type,$sql,$flag);
-			}else{
-				return $this->get_json_grid($type,$sql,'lokal');
-			}
-			
+			return $this->get_json_grid($type,$sql,'lokal');
 		}elseif($balikan == 'row_array'){
-			if($flag){
-				$data=$this->db_remote->query($sql)->row_array();
-				$this->db_remote->close();
-				return $data;
-			}
-			else{
-				return $this->db->query($sql)->row_array();
-			}
+			return $this->db->query($sql)->row_array();
 		}elseif($balikan == 'result'){
-			if($flag){
-				$data=$this->db_remote->query($sql)->result();
-				$this->db_remote->close();
-				return $data;
-			}else{
-				return $this->db->query($sql)->result();
-			}
+			return $this->db->query($sql)->result();
 		}elseif($balikan == 'get'){
 			return $this->db->query($sql)->row_array();
 		}elseif($balikan == 'result_array'){
-			if($flag){
-				$data=$this->db_remote->query($sql)->result_array();
-				$this->db_remote->close();
-				return $data;
-			}else{
-				return $this->db->query($sql)->result_array();
-			}
+			return $this->db->query($sql)->result_array();
 		}
 		
 	}
@@ -491,27 +549,24 @@ class Mbackend extends CI_Model{
 	function get_json_grid($type,$sql,$koneksi){
 		$page = (integer) (($this->input->post('page')) ? $this->input->post('page') : "1");
 		$limit = (integer) (($this->input->post('rows')) ? $this->input->post('rows') : "10");
-		if($koneksi!='lokal'){
-			$count = $this->db_remote->query($sql)->num_rows();
-		}
-		else{
-			$count = $this->db->query($sql)->num_rows();
-		}
+		$count = $this->db->query($sql)->num_rows();
 		
 		if( $count >0 ) { $total_pages = ceil($count/$limit); } else { $total_pages = 0; } 
 		if ($page > $total_pages) $page=$total_pages; 
 		$start = $limit*$page - $limit; // do not put $limit*($page - 1)
 		if($start<0) $start=0;
 		 		
-		$sql = $sql . " LIMIT $start,$limit";
-		if($koneksi!='lokal'){
-			$data = $this->db_remote->query($sql)->result_array();
-		}
-		else{			
-			$data = $this->db->query($sql)->result_array();  
-		}
+		$sql = $sql . " LIMIT $start,$limit";		
+		$data = $this->db->query($sql)->result_array();  
 		
 		if($type == "penjualan"){
+			if($this->auth["role"] == "PIC"){
+				foreach($data as $k => $v){
+					$cek_sales = $this->db->get_where("tbl_registration", array("registration_code"=>$v["kode_marketing"]) )->row_array();
+					$data[$k]["nama_sales"] = $cek_sales["nama_lengkap"];
+				}
+			}
+		}elseif($type == "penjualanumum"){
 			if($this->auth["role"] == "PIC"){
 				foreach($data as $k => $v){
 					$cek_sales = $this->db->get_where("tbl_registration", array("registration_code"=>$v["kode_marketing"]) )->row_array();
@@ -532,12 +587,13 @@ class Mbackend extends CI_Model{
 		   return json_encode($responce);
 		} 
 	}
+	
 	function get_combo($type="", $p1="", $p2=""){
 		switch($type){
 			case "cl_provinsi":
 				$sql = "
 					SELECT kode_prov as id, provinsi as txt
-					FROM cl_provinsi
+					FROM cl_provinsi_indo
 				";
 			break;
 			case "cl_kab_kota":
@@ -547,7 +603,7 @@ class Mbackend extends CI_Model{
 				}
 				$sql = "
 					SELECT kode_kab_kota as id, kab_kota as txt
-					FROM cl_kab_kota
+					FROM cl_kab_kota_indo
 					WHERE cl_provinsi_kode = '".$provinsi."'
 				";
 			break;
@@ -558,7 +614,7 @@ class Mbackend extends CI_Model{
 				}
 				$sql = "
 					SELECT kode_kecamatan as id, kecamatan as txt
-					FROM cl_kecamatan
+					FROM cl_kecamatan_indo
 					WHERE cl_kab_kota_kode = '".$kab_kota."'
 				";
 			break;
@@ -576,10 +632,10 @@ class Mbackend extends CI_Model{
 		
 		switch($table){
 			case "uploadfile_basttandaterima":
-				$this->get_koneksi("B");
+				//$this->get_koneksi("B");
 				$sts_crud = 'falseto';
 				$array_cek_invoice = array( 'no_order' => $data['inv'] );
-				$cek_invoice = $this->db_remote->get_where('tbl_h_pemesanan', $array_cek_invoice)->row_array();
+				$cek_invoice = $this->db->get_where('tbl_h_pemesanan', $array_cek_invoice)->row_array();
 				if($cek_invoice){
 					$tbl_h_pemesanan_id = $cek_invoice['id'];
 				}else{
@@ -587,12 +643,12 @@ class Mbackend extends CI_Model{
 					echo 2; exit; //cek data invoice exist;
 				}
 				
-				$cek_dir = "../mks/__repository/bast_tandaterima/";
+				$cek_dir = "../".$this->config->item("folder_webstore")."/__repository/bast_tandaterima/";
 				if(!is_dir($cek_dir)) {
 					mkdir($cek_dir, 0777);         
 				}			
 				
-				$upload_path = "../mks/__repository/bast_tandaterima/";
+				$upload_path = "../".$this->config->item("folder_webstore")."/__repository/bast_tandaterima/";
 				if(!empty($_FILES['fl_bast']['name'])){					
 					$file_bast = "BAST-".$cek_invoice['no_order'];
 					$filename_bast =  $this->lib->uploadnong($upload_path, 'fl_bast', $file_bast); //$file.'.'.$extension;
@@ -613,31 +669,31 @@ class Mbackend extends CI_Model{
 					'file_tanda_terima' => $filename_tandaterima,
 					'create_date' => date('Y-m-d H:i:s'),
 				);
-				$this->db_remote->insert('tbl_uploadfile', $data_upload);
+				$this->db->insert('tbl_uploadfile', $data_upload);
 			break;
 			case "konfirmasi_pembayaran":
-				$this->get_koneksi("B");
+				//$this->get_koneksi("B");
 				$sts_crud = 'falseto';
-				$data_inv = $this->db_remote->get_where('tbl_h_pemesanan', array('no_order'=>$data['inv']) )->row_array();
+				$data_inv = $this->db->get_where('tbl_h_pemesanan', array('no_order'=>$data['inv']) )->row_array();
 				if($data_inv){	
 					$sql_maxkonf = "
 						SELECT MAX(no_konfirmasi) as konfirmasi_no
 						FROM tbl_konfirmasi
 					";
-					$maxkonf = $this->db_remote->query($sql_maxkonf)->row_array();
+					$maxkonf = $this->db->query($sql_maxkonf)->row_array();
 					if($maxkonf['konfirmasi_no'] != null){
 						$acak_no_konf = ($maxkonf['konfirmasi_no'] + 1); 
 					}else{
 						$acak_no_konf = 1;
 					}
 					
-					$cek_dir = "../mks/__repository/konfirmasi/";
+					$cek_dir = "../".$this->config->item("folder_webstore")."/__repository/konfirmasi/";
 					if(!is_dir($cek_dir)) {
 						mkdir($cek_dir, 0777);         
 					}			
 					
 					if(!empty($_FILES['bkt_byr']['name'])){					
-						$upload_path = "../mks/__repository/konfirmasi/";
+						$upload_path = "../".$this->config->item("folder_webstore")."/__repository/konfirmasi/";
 						$file = "FILEBUKTIBAYAR-".$data_inv['no_order'];
 						$filename =  $this->lib->uploadnong($upload_path, 'bkt_byr', $file); //$file.'.'.$extension;
 					}else{
@@ -661,59 +717,13 @@ class Mbackend extends CI_Model{
 						'create_by' => "SALES - ".$this->auth["nama_lengkap"],
 						'file_bukti_bayar' => $filename,
 					);
-					$crud = $this->db_remote->insert('tbl_konfirmasi', $array_insert);
+					$crud = $this->db->insert('tbl_konfirmasi', $array_insert);
 					if($crud){
 						//$this->db->update('tbl_h_pemesanan', array('status'=>'F'), array('no_order'=>$data['inv']) );
 						$email = $this->getdata('getemail_cust', 'row_array', $data['inv']);
 						$this->lib->kirimemail('email_konfirmasi', $email['email'], $data['inv']);
 					}
-					
-					
-					/* Koding Lawas
-					if($data_inv['status'] == 'P'){ // konfirmasi untuk pembeli umum
-						$array_insert = array(
-							'no_konfirmasi' => $acak_no_konf,
-							'tgl_konfirmasi' => date('Y-m-d'),
-							'tbl_h_pemesanan_id' => $data_inv['id'],
-							'total_pembayaran' => (int)$total_pembayaran,
-							'nama_bank_pengirim' => $data['bank_pengirim'],
-							'atas_nama_pengirim' => $data['atas_nama'],
-							'tanggal_transfer' => $data['tgl_trf'],
-							'nama_bank_penerima' => $data['bank_tujuan'],
-							'flag' => 'P',
-							'create_date' => date('Y-m-d H:i:s'),
-							'file_bukti_bayar' => $filename,
-						);
-						$crud = $this->db->insert('tbl_konfirmasi', $array_insert);
-						if($crud){
-							$this->db->update('tbl_h_pemesanan', array('status'=>'F'), array('no_order'=>$data['inv']) );
-							$email = $this->getdata('getemail_cust', 'row_array', $data['inv']);
-							$this->lib->kirimemail('email_konfirmasi', $email['email'], $data['inv']);
-						}
-
-					}elseif($data_inv['status'] == 'B'){ // konfirmasi untuk pembeli sekolah
-						$array_update = array(
-							'no_konfirmasi' => $acak_no_konf,
-							'tgl_konfirmasi' => date('Y-m-d'),
-							'total_pembayaran' => (int)$total_pembayaran,
-							'nama_bank_pengirim' => $data['bank_pengirim'],
-							'atas_nama_pengirim' => $data['atas_nama'],
-							'tanggal_transfer' => $data['tgl_trf'],
-							'nama_bank_penerima' => $data['bank_tujuan'],
-							'flag' => 'P',
-							'create_date' => date('Y-m-d H:i:s'),
-							'file_bukti_bayar' => $filename,
-						);
-						$crud = $this->db->update('tbl_konfirmasi', $array_update, array('tbl_h_pemesanan_id' => $data_inv['id']) );
-						if($crud){
-							//$this->db->update('tbl_h_pemesanan', array('status'=>'F'), array('no_order'=>$data['inv']) );
-							$email = $this->getdata('getemail_cust', 'row_array', $data['inv']);
-							$this->lib->kirimemail('email_konfirmasi', $email['email'], $data['inv']);
-						}
-						
-					}
-					*/
-					
+										
 				}else{
 					echo 2;
 					exit;
@@ -794,9 +804,9 @@ class Mbackend extends CI_Model{
 				
 				$table = "tbl_registration";
 				$arrayparam = array(
-					"email_address" => $this->auth['email_address']
+					"username" => $this->auth['username']
 				);
-				$data['pwd'] = $this->encrypt->encode($data['newpass']);
+				$data['password'] = $this->encrypt->encode($data['newpass']);
 				
 				unset($data['newpass']);
 				unset($data['oldpass']);

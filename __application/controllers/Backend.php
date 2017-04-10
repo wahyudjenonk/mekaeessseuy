@@ -40,8 +40,8 @@ class Backend extends JINGGA_Controller {
 						$this->nsmarty->assign("data", $data);
 					}elseif($p2 == "konfirmasi"){
 						$no_order = $this->input->post("ord");
-						$dbbook = $this->load->database('buku',true);
-						$cek_no_order = $dbbook->get_where("tbl_h_pemesanan", array("no_order"=>$no_order) )->row_array();
+						//$dbbook = $this->load->database('buku',true);
+						$cek_no_order = $this->db->get_where("tbl_h_pemesanan", array("no_order"=>$no_order) )->row_array();
 						if($cek_no_order){ 
 							$cek_konf = $this->mbackend->getdata('tbl_cek_konfirmasi', 'row_array', $cek_no_order['id'] );
 							if($cek_konf){
@@ -62,8 +62,8 @@ class Backend extends JINGGA_Controller {
 						$this->nsmarty->assign( 'no_order', $no_order ); 
 					}elseif($p2 == "upload"){
 						$no_order = $this->input->post("ord");
-						$dbbook = $this->load->database('buku',true);
-						$cek_no_order = $dbbook->get_where("tbl_h_pemesanan", array("no_order"=>$no_order) )->row_array();
+						//$dbbook = $this->load->database('buku',true);
+						$cek_no_order = $this->db->get_where("tbl_h_pemesanan", array("no_order"=>$no_order) )->row_array();
 						if($cek_no_order){ 
 							$cek_upl = $this->mbackend->getdata('tbl_cek_uploadfile', 'row_array', $cek_no_order['id'] );
 							if($cek_upl){
@@ -365,15 +365,15 @@ class Backend extends JINGGA_Controller {
 						$datadetailpesanan[$k]['nama_group'] = strtoupper(substr($v['nama_group'], 0,1));
 					}
 					
-					$dbbook = $this->load->database('buku',true);
-					$cekdatabast = $dbbook->get_where('tbl_bast', array('tbl_h_pemesanan_id'=>$data_invoice['idpesan']) )->row_array();
+					//$dbbook = $this->load->database('buku',true);
+					$cekdatabast = $this->db->get_where('tbl_bast', array('tbl_h_pemesanan_id'=>$data_invoice['idpesan']) )->row_array();
 					if(!$cekdatabast){
 						$array_insert_bast = array(
 							'tbl_h_pemesanan_id' => $data_invoice['idpesan'],
 							'no_bast' => $no_bast,
 							'create_date' => date('Y-m-d H:i:s')
 						);
-						$dbbook->insert('tbl_bast', $array_insert_bast);
+						$this->db->insert('tbl_bast', $array_insert_bast);
 						
 						$tgl = $this->lib->konversi_tgl(date('Y-m-d'));
 						$time = $this->lib->konversi_jam(date('H:i:s'));
@@ -425,15 +425,15 @@ class Backend extends JINGGA_Controller {
 					$datacust = $this->mbackend->getdata('datacustomer', 'row_array', $data_invoice['tbl_registrasi_id'], '', 'cetak_bast');
 					$jumlah = number_to_words($data_invoice['grand_total']);
 					
-					$dbbook = $this->load->database('buku',true);
-					$cekdatakwitansi = $dbbook->get_where('tbl_kwitansi', array('tbl_h_pemesanan_id'=>$data_invoice['idpesan']) )->row_array();
+					//$dbbook = $this->load->database('buku',true);
+					$cekdatakwitansi = $this->db->get_where('tbl_kwitansi', array('tbl_h_pemesanan_id'=>$data_invoice['idpesan']) )->row_array();
 					if(!$cekdatakwitansi){
 						$array_insert_kwitansi = array(
 							'tbl_h_pemesanan_id' => $data_invoice['idpesan'],
 							'no_kwitansi' => $no_kwitansi,
 							'create_date' => date('Y-m-d H:i:s')
 						);
-						$dbbook->insert('tbl_kwitansi', $array_insert_kwitansi);
+						$this->db->insert('tbl_kwitansi', $array_insert_kwitansi);
 						$tglgenerate = date('Y-m-d H:i:s');
 					}else{
 						$tglgenerate = $cekdatakwitansi["create_date"];
