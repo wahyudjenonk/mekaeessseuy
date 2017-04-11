@@ -123,7 +123,7 @@ class Lib {
 			case "email_lupa_password":
 				$ci->nsmarty->assign('email', $p1['email_address']);
 				$ci->nsmarty->assign('password', $p1['password']);
-				$ci->nsmarty->assign('kodemarketing', $p1['member_user']);
+				$ci->nsmarty->assign('kodemarketing', $p1['registration_code']);
 				$html = $ci->nsmarty->fetch('backend/email-password.html');
 				$subject = "EMAIL REGISTRASI TOOLS MARKETING MKS Store";
 			break;

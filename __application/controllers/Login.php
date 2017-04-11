@@ -120,13 +120,13 @@ class Login extends JINGGA_Controller {
 	}
 
 	function submitlupapassword(){
-		$cek_data = $this->db->get_where('tbl_member', array('email_address'=>$this->input->post('edMail')) )->row_array();
+		$cek_data = $this->db->get_where('tbl_registration', array('email_address'=>$this->input->post('edMail')) )->row_array();
 		if(!$cek_data){
 			echo "<center>Data anda tidak ada dalam system kami</center>";
 			exit;
 		}
 		
-		$cek_data['password'] = $this->encrypt->decode($cek_data['pwd']);
+		$cek_data['password'] = $this->encrypt->decode($cek_data['password']);
 		$kirim_email = $this->lib->kirimemail('email_lupa_password', $this->input->post('edMail'), $cek_data);
 		if($kirim_email){
 			echo 1;

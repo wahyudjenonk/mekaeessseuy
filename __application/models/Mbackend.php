@@ -796,7 +796,7 @@ class Mbackend extends CI_Model{
 			break;
 			case "ubah_password":
 				$this->load->library('encrypt');
-				$password_lama = $this->encrypt->decode($this->auth['pwd']);
+				$password_lama = $this->encrypt->decode($this->auth['password']);
 				if($data['oldpass'] != $password_lama){
 					echo 2;
 					exit;
