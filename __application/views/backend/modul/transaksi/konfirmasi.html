@@ -8,6 +8,7 @@
 		{if $cek_konf eq 'true'}
 		<form class="form-horizontal" id='frmkonfirm' name='frmkonfirm' url="{$host}submit-konfirmasi" enctype="multipart/form-data" method="post">
 			<input type="hidden" name="inv" value="{$data_order.no_order}">
+			<input type="hidden" id="tot_server" value="{$data_order.grand_total}">
 			<input type="hidden" name="id" value="{$data.id|default:''}">
 			<div class="control-group">
 				<label class="control-label" for="form-field-1">No. Order</label>
@@ -18,7 +19,7 @@
 			<div class="control-group">
 				<label class="control-label" for="form-field-1">Jumlah Tagihan</label>
 				<div class="controls">
-					<div id="form-field-1" class="span8" id="form-field-1"><font color="red">{$data_order.grand_total}</font></div>
+					<div id="form-field-1" class="span8" id="form-field-1"><font color="red">Rp. {$data_order.grand_total}</font></div>
 				</div>
 			</div>			
 			<div class="control-group">
@@ -162,6 +163,15 @@
 	});	
 	
 	$('#simpanKonfirm').on('click', function(){
+		var tot_server = $('#tot_server').val();
+		var jml_trf = $("#jml_trf").val();
+		if(tot_server != jml_trf){
+			$('#modalencuk').html('<h3>Jumlah Transfer Tidak Sama Dengan Total Pembayaran</h3>');
+			$('#pesanModal').modal('show');
+			$("#jml_trf").val("");
+			return false;
+		}
+		
 		validasi = $('#frmkonfirm').form('validate');
 		submit_form('frmkonfirm',function(r){
 			if(r == 1){

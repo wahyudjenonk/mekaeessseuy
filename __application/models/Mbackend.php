@@ -247,6 +247,21 @@ class Mbackend extends CI_Model{
 					$where .= " AND A.kode_marketing='".$this->auth['registration_code']."' ";
 				}
 				
+				$no_order = $this->input->post("ordno");
+				$nama_pelanggan = $this->input->post("nmseko");
+				
+				if($no_order){
+					$where .= "
+						AND A.no_order = '".$no_order."'
+					";
+				}
+				
+				if($nama_pelanggan){
+					$where .= "
+						AND B.nama_lengkap like '%".$nama_pelanggan."%'
+					";
+				}
+				
 				$sql = "
 					SELECT A.*, B.nama_sekolah, B.nama_lengkap,
 						DATE_FORMAT(A.tgl_order,'%d %b %Y %h:%i %p') as tanggal_order
@@ -282,6 +297,21 @@ class Mbackend extends CI_Model{
 					}
 				}else{
 					$where .= " AND A.kode_marketing='".$this->auth['registration_code']."' ";
+				}
+				
+				$no_order = $this->input->post("ordno");
+				$nama_sekolah = $this->input->post("nmseko");
+				
+				if($no_order){
+					$where .= "
+						AND A.no_order = '".$no_order."'
+					";
+				}
+				
+				if($nama_sekolah){
+					$where .= "
+						AND B.nama_sekolah like '%".$nama_sekolah."%'
+					";
 				}
 				
 				$sql = "

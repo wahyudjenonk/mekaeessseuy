@@ -53,7 +53,7 @@ class Backend extends JINGGA_Controller {
 								$this->nsmarty->assign( 'cek_konf', "true");
 							}
 							
-							$cek_no_order["grand_total"] = "Rp. ".number_format($cek_no_order['grand_total'],0,",",".");
+							$cek_no_order["grand_total"] = number_format($cek_no_order['grand_total'],0,",",".");
 							$this->nsmarty->assign( 'data_order', $cek_no_order ); 
 						}else{ 
 							$this->nsmarty->assign( 'cek_order', "false" ); 
