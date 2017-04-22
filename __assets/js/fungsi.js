@@ -1386,3 +1386,17 @@ function openWindowWithPost(url,params)
     newWindow.document.write(html);
     return newWindow;
 }
+
+function advancedSearch(divnya, acak, type){
+	var post_search = {};
+	
+	if(type == 'balikin'){
+		$('#no_inv_'+acak).val('');
+		$('#nm_sekolah_'+acak).val('');
+	}else{
+		post_search['ordno'] = $('#no_inv_'+acak).val();
+		post_search['nmseko'] = $('#nm_sekolah_'+acak).val();
+	}
+	
+	$('#grid_'+divnya).datagrid('reload', post_search);
+}
